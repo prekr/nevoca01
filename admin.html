@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NE VOCA - 관리자 센터</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            overflow: hidden;
+            /* 사이드바 내비게이션 형태이므로 내부 스크롤 사용 */
+        }
+
+        #teacherMode {
+            position: relative;
+            /* 새 창이므로 fixed일 필요 없음 */
+            display: block !important;
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="teacherMode">
+        <!-- 학생 추가 모달 레이어 (내부에 위치시켜 확실한 렌더링 보장) -->
+        <div id="addStudentModal" class="modal-overlay" style="display: none; z-index: 9999;">
+            <div class="modal-content" style="max-width: 500px;">
+                <div class="modal-header">
+                    <h3>학생 추가하기</h3>
+                    <button class="modal-close" onclick="window.closeAddStudentModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>현재 반에 소속되지 않은 학생 목록입니다.<br>추가할 학생을 선택해 주세요.</p>
+                    <div class="student-selection-list" style="margin-top: 1rem;">
+                        <label class="student-item-checkbox">
+                            <input type="checkbox"> <span>김철수 (ID: chulsoo01)</span>
+                        </label>
+                        <label class="student-item-checkbox">
+                            <input type="checkbox"> <span>이영희 (ID: younghee_v)</span>
+                        </label>
+                        <label class="student-item-checkbox">
+                            <input type="checkbox"> <span>박지민 (ID: jimin_p)</span>
+                        </label>
+                        <label class="student-item-checkbox">
+                            <input type="checkbox"> <span>최동건 (ID: dg_choi)</span>
+                        </label>
+                        <label class="student-item-checkbox">
+                            <input type="checkbox"> <span>정채연 (ID: chaeyeon)</span>
+                        </label>
+                        <label class="student-item-checkbox">
+                            <input type="checkbox"> <span>강하늘 (ID: sky_kang)</span>
+                        </label>
+                        <label class="student-item-checkbox">
+                            <input type="checkbox"> <span>황희찬 (ID: h_chan)</span>
+                        </label>
+                        <label class="student-item-checkbox">
+                            <input type="checkbox"> <span>조규성 (ID: guesung_cho)</span>
+                        </label>
+                    </div>
+                    <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                        <button class="cancel-btn" style="padding: 0.8rem; margin: 0;"
+                            onclick="window.closeAddStudentModal()">취소</button>
+                        <button class="submit-btn" style="padding: 0.8rem; margin: 0;"
+                            onclick="window.addSelectedStudents()">학생 추가 완료</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="teacher-dashboard">
+            <aside class="teacher-sidebar">
+                <div class="sidebar-logo">NE VOCA <span>For Teacher</span></div>
+                <nav class="sidebar-menu">
+                    <button class="menu-item active" data-view="class">
+                        <span class="menu-icon">🏢</span>
+                        <span>내 반 관리</span>
+                    </button>
+                    <button class="menu-item" data-view="students">
+                        <span class="menu-icon">👨‍🎓</span>
+                        <span>내 학생 관리</span>
+                    </button>
+                    <button class="menu-item" data-view="assignments">
+                        <span class="menu-icon">✍️</span>
+                        <span>과제 만들기</span>
+                    </button>
+                    <button class="menu-item" data-view="manageAssignments">
+                        <span class="menu-icon">📋</span>
+                        <span>과제 관리</span>
+                    </button>
+                    <button class="menu-item" data-view="results">
+                        <span class="menu-icon">📊</span>
+                        <span>과제 수행결과</span>
+                    </button>
+                </nav>
+            </aside>
+            <main class="teacher-main">
+                <header class="teacher-header">
+                    <h2 id="teacherViewTitle">내 반 관리</h2>
+                    <div class="teacher-user">
+                        <span class="user-role">Premium Teacher</span>
+                        <span class="user-name">김교사 선생님</span>
+                        <div class="teacher-code-badge">
+                            <span class="code-label">선생님 코드:</span>
+                            <span class="code-value" id="teacherCodeDisplay">------</span>
+                            <button class="copy-code-btn" onclick="copyTeacherCode()" title="코드 복사">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </header>
+                <div class="teacher-content-area" id="teacherContent">
+                    <!-- Content will be rendered here via JS -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        const teacherViewTitle = document.getElementById('teacherViewTitle');
+        const teacherContent = document.getElementById('teacherContent');
+        const teacherMenuBtn = document.querySelectorAll('.menu-item');
+
+        function showTeacherView(viewName, param) {
+            document.querySelectorAll('.menu-item').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.view === viewName);
+            });
+
+            let html = '';
+            switch (viewName) {
+                case 'class':
+                    teacherViewTitle.textContent = '내 반 관리';
+                    html = `
+                        <div class="teacher-summary-grid">
+                            <div class="teacher-stat-card">
+                                <span class="stat-label">관리 중인 반</span>
+                                <span class="stat-value">4개</span>
+                            </div>
+                            <div class="teacher-stat-card">
+                                <span class="stat-label">전체 학생 수</span>
+                                <span class="stat-value">128명</span>
+                            </div>
+                            <div class="teacher-stat-card">
+                                <span class="stat-label">평균 성취도</span>
+                                <span class="stat-value">96%</span>
+                            </div>
+                        </div>
+                        <div class="teacher-table-card">
+                            <div class="table-header">
+                                <h3>반 목록</h3>
+                                <button class="add-btn" onclick="showTeacherView('createClass')">+ 새 반 만들기</button>
+                            </div>
+                            <table class="teacher-table">
+                                <thead>
+                                    <tr>
+                                        <th>반 이름</th>
+                                        <th>학생 수</th>
+                                        <th>사용 교재</th>
+                                        <th>상태</th>
+                                        <th style="text-align: right;">관리</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>고등 영어 기초A</strong></td>
+                                        <td>32명</td>
+                                        <td>능률VOCA 어원편</td>
+                                        <td><span class="status-badge active">수업 중</span></td>
+                                        <td style="text-align: right; display: flex; gap: 0.5rem; justify-content: flex-end;">
+                                            <button class="approve-btn" style="padding: 0.4rem 0.7rem; font-size: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white;">수정</button>
+                                            <button class="approve-btn" style="padding: 0.4rem 0.7rem; font-size: 0.8rem;" onclick="showTeacherView('classDetail', '고등 영어 기초A')">학생 관리</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>수능 심화B</strong></td>
+                                        <td>28명</td>
+                                        <td>수능 필수 2000</td>
+                                        <td><span class="status-badge active">수업 중</span></td>
+                                        <td style="text-align: right; display: flex; gap: 0.5rem; justify-content: flex-end;">
+                                            <button class="approve-btn" style="padding: 0.4rem 0.7rem; font-size: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white;">수정</button>
+                                            <button class="approve-btn" style="padding: 0.4rem 0.7rem; font-size: 0.8rem;" onclick="showTeacherView('classDetail', '수능 심화B')">학생 관리</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                    break;
+                case 'classDetail':
+                    const className = param || '선택된 반';
+                    teacherViewTitle.textContent = `${className} - 학생 관리`;
+                    html = `
+                        <div class="teacher-table-card">
+                            <div class="table-header">
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <button class="cancel-btn" style="padding: 0.5rem 1rem; width: auto; margin: 0; font-size: 0.9rem;" onclick="showTeacherView('class')">← 뒤로가기</button>
+                                    <h3>학생 명단 (${className})</h3>
+                                </div>
+                                <button class="add-btn" onclick="openAddStudentModal()">+ 학생 추가</button>
+                            </div>
+                            <table class="teacher-table">
+                                <thead>
+                                    <tr>
+                                        <th>이름(ID)</th>
+                                        <th>최근 학습</th>
+                                        <th>과제 이수율</th>
+                                        <th style="text-align: right;">관리</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>이강인</strong> (kangin_leee)</td>
+                                        <td>1시간 전</td>
+                                        <td>98%</td>
+                                        <td style="text-align: right;">
+                                            <button class="reject-btn" style="padding: 0.4rem 0.7rem; font-size: 0.8rem;" onclick="confirm('이 학생을 반에서 제외하시겠습니까?') && alert('삭제되었습니다.')">제외</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>손흥민</strong> (sonny7)</td>
+                                        <td>어제</td>
+                                        <td>85%</td>
+                                        <td style="text-align: right;">
+                                            <button class="reject-btn" style="padding: 0.4rem 0.7rem; font-size: 0.8rem;" onclick="confirm('이 학생을 반에서 제외하시겠습니까?') && alert('삭제되었습니다.')">제외</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>김민재</strong> (monster_kmj)</td>
+                                        <td>3일 전</td>
+                                        <td>72%</td>
+                                        <td style="text-align: right;">
+                                            <button class="reject-btn" style="padding: 0.4rem 0.7rem; font-size: 0.8rem;" onclick="confirm('이 학생을 반에서 제외하시겠습니까?') && alert('삭제되었습니다.')">제외</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                    break;
+                case 'createClass':
+                    teacherViewTitle.textContent = '새 반 만들기';
+                    html = `
+                        <div class="teacher-table-card" style="max-width: 900px; margin: 0 auto;">
+                            <div class="teacher-form-group">
+                                <label>반 이름</label>
+                                <input type="text" class="teacher-input" placeholder="예: [초급] 영단어 마스터반">
+                            </div>
+
+                            <div class="teacher-form-group">
+                                <label>교재 선택</label>
+                                <div class="book-grid-selection">
+                                    <label class="book-item-radio">
+                                        <input type="radio" name="textbook" checked>
+                                        <div class="book-visual">
+                                            <span class="book-emoji">📘</span>
+                                            <span class="book-title-mini">능률VOCA 어원편</span>
+                                        </div>
+                                    </label>
+                                    <label class="book-item-radio">
+                                        <input type="radio" name="textbook">
+                                        <div class="book-visual">
+                                            <span class="book-emoji">📕</span>
+                                            <span class="book-title-mini">중학 영단어</span>
+                                        </div>
+                                    </label>
+                                    <label class="book-item-radio">
+                                        <input type="radio" name="textbook">
+                                        <div class="book-visual">
+                                            <span class="book-emoji">📗</span>
+                                            <span class="book-title-mini">수능 필수 2000</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="teacher-form-group">
+                                <label>학생 추가 (불러오기)</label>
+                                <div class="student-selection-list">
+                                    <label class="student-item-checkbox">
+                                        <input type="checkbox"> <span>김철수 (ID: chulsoo01)</span>
+                                    </label>
+                                    <label class="student-item-checkbox">
+                                        <input type="checkbox"> <span>이영희 (ID: younghee_v)</span>
+                                    </label>
+                                    <label class="student-item-checkbox">
+                                        <input type="checkbox"> <span>박지민 (ID: jimin_p)</span>
+                                    </label>
+                                    <label class="student-item-checkbox">
+                                        <input type="checkbox"> <span>최동건 (ID: dg_choi)</span>
+                                    </label>
+                                    <label class="student-item-checkbox">
+                                        <input type="checkbox"> <span>정채연 (ID: chaeyeon)</span>
+                                    </label>
+                                    <label class="student-item-checkbox">
+                                        <input type="checkbox"> <span>강하늘 (ID: sky_kang)</span>
+                                    </label>
+                                </div>
+                                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">총 6명의 학생이 대기 중입니다.</p>
+                            </div>
+
+                            <div class="teacher-form-group">
+                                <label>기능 설정</label>
+                                <div style="display: flex; gap: 2rem;">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="checkbox" checked> <span>매일 자동 출석 체크</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="checkbox" checked> <span>오답 노트 자동 생성</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button class="cancel-btn" onclick="showTeacherView('class')">취소</button>
+                                <button class="submit-btn" onclick="alert('새 반이 성공적으로 만들어졌습니다!'); showTeacherView('class')">반 만들기 완료</button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'students':
+                    teacherViewTitle.textContent = '내 학생 관리';
+                    html = `
+                        <!-- 승인 대기 학생 리스트 -->
+                        <div class="teacher-table-card" style="margin-bottom: 3rem; border-color: rgba(79, 172, 254, 0.3);">
+                            <div class="table-header">
+                                <h3 style="display: flex; align-items: center; gap: 0.8rem;">
+                                    승인 대기 학생 
+                                    <span class="status-badge active" style="font-size: 0.7rem;">3명</span>
+                                </h3>
+                            </div>
+                            <table class="teacher-table">
+                                <thead>
+                                    <tr>
+                                        <th>신청일</th>
+                                        <th>이름(ID)</th>
+                                        <th>신청 메시지</th>
+                                        <th style="text-align: right;">관리</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2026.02.23</td>
+                                        <td><strong>강민호</strong> (minho_k)</td>
+                                        <td>선생님 반에 들어가고 싶습니다!</td>
+                                        <td style="text-align: right; display: flex; gap: 0.5rem; justify-content: flex-end;">
+                                            <button class="approve-btn" onclick="alert('강민호 학생의 승인이 완료되었습니다.'); showTeacherView('students')">승인</button>
+                                            <button class="reject-btn" onclick="alert('거절되었습니다.')">거절</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2026.02.22</td>
+                                        <td><strong>유진아</strong> (jina_yu)</td>
+                                        <td>열심히 하겠습니다.</td>
+                                        <td style="text-align: right; display: flex; gap: 0.5rem; justify-content: flex-end;">
+                                            <button class="approve-btn" onclick="alert('유진아 학생의 승인이 완료되었습니다.'); showTeacherView('students')">승인</button>
+                                            <button class="reject-btn" onclick="alert('거절되었습니다.')">거절</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2026.02.22</td>
+                                        <td><strong>김지한</strong> (jihan_k)</td>
+                                        <td>-</td>
+                                        <td style="text-align: right; display: flex; gap: 0.5rem; justify-content: flex-end;">
+                                            <button class="approve-btn" onclick="alert('김지한 학생의 승인이 완료되었습니다.'); showTeacherView('students')">승인</button>
+                                            <button class="reject-btn" onclick="alert('거절되었습니다.')">거절</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- 전체 학생 리스트 -->
+                        <div class="teacher-table-card">
+                            <div class="table-header">
+                                <h3>내 학생 리스트</h3>
+                                <div style="display: flex; gap: 1rem;">
+                                    <input type="text" placeholder="학생 이름 검색..." style="padding: 0.8rem; border-radius: 12px; border: 1px solid #333; background: #1a1a2e; color: white;">
+                                    <button class="add-btn" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">엑셀 다운로드</button>
+                                </div>
+                            </div>
+                            <table class="teacher-table">
+                                <thead>
+                                    <tr>
+                                        <th>이름</th>
+                                        <th>소속 반</th>
+                                        <th>최근 학습일</th>
+                                        <th>미완료 과제</th>
+                                        <th>학습 리포트</th>
+                                        <th style="text-align: right;">관리</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>이강인</strong> (kangin_leee)</td>
+                                        <td>고등 영어 기초A</td>
+                                        <td>1시간 전</td>
+                                        <td>0건</td>
+                                        <td><button style="background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); padding: 0.3rem 0.6rem; border-radius: 6px; cursor: pointer;">보기</button></td>
+                                        <td style="text-align: right; display: flex; gap: 0.5rem; justify-content: flex-end;">
+                                            <button class="approve-btn" style="padding: 0.4rem 0.7rem; font-size: 0.8rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white;" onclick="const newClass = prompt('이강인 학생의 이동할 반을 선택해주세요.\n1. 고등 영어 기초A\n2. 수능 심화B\n3. 중학 영단어반'); if(newClass) alert('반 변경이 완료되었습니다.')">반 수정</button>
+                                            <button class="reject-btn" style="padding: 0.4rem 0.7rem; font-size: 0.8rem;" onclick="confirm('이강인 학생을 정말 삭제하시겠습니까?') && alert('삭제되었습니다.')">삭제</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>손흥민</strong> (sonny7)</td>
+                                        <td>수능 심화B</td>
+                                        <td>오늘</td>
+                                        <td>2건</td>
+                                        <td><button style="background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); padding: 0.3rem 0.6rem; border-radius: 6px; cursor: pointer;">보기</button></td>
+                                        <td style="text-align: right; display: flex; gap: 0.5rem; justify-content: flex-end;">
+                                            <button class="approve-btn" style="padding: 0.4rem 0.7rem; font-size: 0.8rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: white;" onclick="const newClass = prompt('손흥민 학생의 이동할 반을 선택해주세요.\n1. 고등 영어 기초A\n2. 수능 심화B\n3. 중학 영단어반'); if(newClass) alert('반 변경이 완료되었습니다.')">반 수정</button>
+                                            <button class="reject-btn" style="padding: 0.4rem 0.7rem; font-size: 0.8rem;" onclick="confirm('손흥민 학생을 정말 삭제하시겠습니까?') && alert('삭제되었습니다.')">삭제</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                    break;
+                case 'assignments':
+                    teacherViewTitle.textContent = '과제 만들기';
+                    html = `
+                        <div class="teacher-table-card" style="max-width: 800px; margin: 0 auto;">
+                            <div class="teacher-form-group">
+                                <label>과제명</label>
+                                <input type="text" class="teacher-input" placeholder="예: Day 01-05 기초 단어 복습">
+                            </div>
+
+                            <div class="teacher-form-group">
+                                <label>반 선택</label>
+                                <select class="teacher-select">
+                                    <option>고등 영어 기초A</option>
+                                    <option>수능 심화B</option>
+                                    <option>중학 영단어반</option>
+                                </select>
+                            </div>
+
+                            <div class="teacher-form-group">
+                                <label>학생 선택</label>
+                                <div style="display: flex; gap: 2rem; margin-bottom: 1rem;">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="radio" name="studentTarget" value="all" checked onchange="document.getElementById('manualStudentList').style.display='none'"> 
+                                        <span>전체 학생</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="radio" name="studentTarget" value="select" onchange="document.getElementById('manualStudentList').style.display='block'"> 
+                                        <span>학생 선택</span>
+                                    </label>
+                                </div>
+                                <div id="manualStudentList" style="display: none; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1rem;">
+                                    <div class="student-selection-list">
+                                        <label class="student-item-checkbox">
+                                            <input type="checkbox"> <span>김철수 (ID: chulsoo01)</span>
+                                        </label>
+                                        <label class="student-item-checkbox">
+                                            <input type="checkbox"> <span>이영희 (ID: younghee_v)</span>
+                                        </label>
+                                        <label class="student-item-checkbox">
+                                            <input type="checkbox"> <span>박지민 (ID: jimin_p)</span>
+                                        </label>
+                                        <label class="student-item-checkbox">
+                                            <input type="checkbox"> <span>최동건 (ID: dg_choi)</span>
+                                        </label>
+                                        <label class="student-item-checkbox">
+                                            <input type="checkbox"> <span>정채연 (ID: chaeyeon)</span>
+                                        </label>
+                                        <label class="student-item-checkbox">
+                                            <input type="checkbox"> <span>강하늘 (ID: sky_kang)</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="teacher-form-group">
+                                <label>교재 선택</label>
+                                <div class="book-grid-selection">
+                                    <label class="book-item-radio">
+                                        <input type="radio" name="textbook" checked>
+                                        <div class="book-visual">
+                                            <span class="book-emoji">📘</span>
+                                            <span class="book-title-mini">능률VOCA 어원편</span>
+                                        </div>
+                                    </label>
+                                    <label class="book-item-radio">
+                                        <input type="radio" name="textbook">
+                                        <div class="book-visual">
+                                            <span class="book-emoji">📕</span>
+                                            <span class="book-title-mini">중학 영단어</span>
+                                        </div>
+                                    </label>
+                                    <label class="book-item-radio">
+                                        <input type="radio" name="textbook">
+                                        <div class="book-visual">
+                                            <span class="book-emoji">📗</span>
+                                            <span class="book-title-mini">수능 필수 2000</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="teacher-form-group">
+                                <label>학습 범위 선택(Day)</label>
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <div class="day-stepper">
+                                        <span class="stepper-label">Day</span>
+                                        <input type="number" id="assignmentDayStart" value="1" min="1">
+                                        <div class="stepper-btns">
+                                            <button class="stepper-btn" onclick="adjustDay('assignmentDayStart', 1)">▲</button>
+                                            <button class="stepper-btn" onclick="adjustDay('assignmentDayStart', -1)">▼</button>
+                                        </div>
+                                    </div>
+                                    <span style="color: #a0a0b8; font-weight: 700;">~</span>
+                                    <div class="day-stepper">
+                                        <span class="stepper-label">Day</span>
+                                        <input type="number" id="assignmentDayEnd" value="5" min="1">
+                                        <div class="stepper-btns">
+                                            <button class="stepper-btn" onclick="adjustDay('assignmentDayEnd', 1)">▲</button>
+                                            <button class="stepper-btn" onclick="adjustDay('assignmentDayEnd', -1)">▼</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="teacher-form-group">
+                                <label>학습방식 유형 (중복 선택 가능)</label>
+                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                                    <label class="student-item-checkbox" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1rem;">
+                                        <input type="checkbox" checked> <span>스펠링퀴즈</span>
+                                    </label>
+                                    <label class="student-item-checkbox" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1rem;">
+                                        <input type="checkbox" checked> <span>단어퀴즈</span>
+                                    </label>
+                                    <label class="student-item-checkbox" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1rem;">
+                                        <input type="checkbox"> <span>문장퀴즈</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="teacher-form-group">
+                                <label>과제 종료일</label>
+                                <input type="date" class="teacher-input" style="color-scheme: dark;">
+                            </div>
+
+                            <div class="form-actions">
+                                <button class="cancel-btn" onclick="showTeacherView('class')">취소</button>
+                                <button class="submit-btn" onclick="submitAssignment()">과제 배포하기</button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'manageAssignments':
+                    teacherViewTitle.textContent = '과제 관리';
+                    html = `
+                        <div class="teacher-table-card">
+                            <div class="table-header">
+                                <h3>배포된 과제 목록</h3>
+                                <button class="add-btn" onclick="showTeacherView('assignments')">+ 과제 만들기</button>
+                            </div>
+                            <table class="teacher-table">
+                                <thead>
+                                    <tr>
+                                        <th>과제명</th>
+                                        <th>대상 반</th>
+                                        <th>교재 / 범위</th>
+                                        <th>학습 유형</th>
+                                        <th>마감일</th>
+                                        <th>상태</th>
+                                        <th style="text-align: right;">관리</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Day 01-05 기초 단어</strong></td>
+                                        <td>고등 영어 기초A</td>
+                                        <td>어원편 (D1~D5)</td>
+                                        <td><span style="font-size: 0.8rem; background: rgba(255,255,255,0.1); padding: 0.2rem 0.5rem; border-radius: 4px;">스펠링, 단어</span></td>
+                                        <td>2026.03.01</td>
+                                        <td><span class="status-badge active">진행중</span></td>
+                                        <td style="text-align: right;">
+                                            <button class="approve-btn" style="padding: 0.4rem 0.7rem; font-size: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white;" onclick="showTeacherView('results')">결과</button>
+                                            <button class="reject-btn" style="padding: 0.4rem 0.7rem; font-size: 0.8rem;">삭제</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>중학 필수 동사 50</strong></td>
+                                        <td>중학 영단어반</td>
+                                        <td>중학 기초 (D10~D12)</td>
+                                        <td><span style="font-size: 0.8rem; background: rgba(255,255,255,0.1); padding: 0.2rem 0.5rem; border-radius: 4px;">단어, 문장</span></td>
+                                        <td>2026.02.20</td>
+                                        <td><span class="status-badge complete" style="background: rgba(255,255,255,0.05); color: #888;">마감</span></td>
+                                        <td style="text-align: right;">
+                                            <button class="approve-btn" style="padding: 0.4rem 0.7rem; font-size: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white;" onclick="showTeacherView('results')">결과</button>
+                                            <button class="reject-btn" style="padding: 0.4rem 0.7rem; font-size: 0.8rem;">삭제</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>수능 고난도 어휘 100</strong></td>
+                                        <td>수능 심화B</td>
+                                        <td>수능 필수 (D40~D45)</td>
+                                        <td><span style="font-size: 0.8rem; background: rgba(255,255,255,0.1); padding: 0.2rem 0.5rem; border-radius: 4px;">스펠링</span></td>
+                                        <td>2026.03.05</td>
+                                        <td><span class="status-badge active">진행중</span></td>
+                                        <td style="text-align: right;">
+                                            <button class="approve-btn" style="padding: 0.4rem 0.7rem; font-size: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white;" onclick="showTeacherView('results')">결과</button>
+                                            <button class="reject-btn" style="padding: 0.4rem 0.7rem; font-size: 0.8rem;">삭제</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                    break;
+                case 'results':
+                    teacherViewTitle.textContent = '과제 수행결과';
+                    html = `
+                        <div class="result-tabs" style="display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
+                            <button class="menu-item active" style="padding: 0.8rem 1.5rem; background: rgba(102, 126, 234, 0.1);" onclick="switchResultTab('student')">👤 학생별</button>
+                            <button class="menu-item" style="padding: 0.8rem 1.5rem;" onclick="switchResultTab('class')">🏢 반별</button>
+                            <button class="menu-item" style="padding: 0.8rem 1.5rem;" onclick="switchResultTab('assignment')">📝 과제별</button>
+                            <button class="menu-item" style="padding: 0.8rem 1.5rem;" onclick="switchResultTab('textbook')">📚 교재별</button>
+                        </div>
+
+                        <div id="resultTabContent">
+                            <!-- 학생별 결과 (Default) -->
+                            <div class="teacher-summary-grid">
+                                <div class="teacher-stat-card">
+                                    <span class="stat-label">학습 완료 인원</span>
+                                    <span class="stat-value">112 / 128</span>
+                                </div>
+                                <div class="teacher-stat-card">
+                                    <span class="stat-label">평균 성취도</span>
+                                    <span class="stat-value">94%</span>
+                                </div>
+                            </div>
+                            <div class="teacher-table-card">
+                                <h3>학생별 누적 수행 데이터</h3>
+                                <table class="teacher-table">
+                                    <thead>
+                                        <tr>
+                                            <th>이름</th>
+                                            <th>완료 과제</th>
+                                            <th>평균 점수</th>
+                                            <th>최근 학습일</th>
+                                            <th>성취도</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>강민호</td>
+                                            <td>24 / 25</td>
+                                            <td>96점</td>
+                                            <td>오늘</td>
+                                            <td><span class="status-badge complete">최우수</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>이강인</td>
+                                            <td>25 / 25</td>
+                                            <td>92점</td>
+                                            <td>1시간 전</td>
+                                            <td><span class="status-badge complete">우수</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+            teacherContent.innerHTML = html;
+        }
+
+        function switchResultTab(tabName) {
+            const container = document.getElementById('resultTabContent');
+            const buttons = document.querySelectorAll('.result-tabs .menu-item');
+
+            buttons.forEach(btn => {
+                const isActive = btn.innerText.includes(
+                    tabName === 'student' ? '학생' :
+                        (tabName === 'class' ? '반별' :
+                            (tabName === 'assignment' ? '과제' : '교재'))
+                );
+                btn.classList.toggle('active', isActive);
+                btn.style.background = isActive ? 'rgba(102, 126, 234, 0.1)' : 'transparent';
+            });
+
+            let html = '';
+            if (tabName === 'student') {
+                html = `
+                    <div class="teacher-summary-grid">
+                        <div class="teacher-stat-card">
+                            <span class="stat-label">학습 완료 인원</span>
+                            <span class="stat-value">112 / 128</span>
+                        </div>
+                        <div class="teacher-stat-card">
+                            <span class="stat-label">평균 성취도</span>
+                            <span class="stat-value">94%</span>
+                        </div>
+                    </div>
+                    <div class="teacher-table-card">
+                        <h3>학생별 누적 수행 데이터</h3>
+                        <table class="teacher-table">
+                            <thead>
+                                <tr><th>이름</th><th>완료 과제</th><th>평균 점수</th><th>최근 학습일</th><th>성취도</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>강민호</td><td>24 / 25</td><td>96점</td><td>오늘</td><td><span class="status-badge complete">최우수</span></td></tr>
+                                <tr><td>이강인</td><td>25 / 25</td><td>92점</td><td>1시간 전</td><td><span class="status-badge complete">우수</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            } else if (tabName === 'class') {
+                html = `
+                    <div class="teacher-summary-grid">
+                        <div class="teacher-stat-card">
+                            <span class="stat-label">관리 중인 반</span>
+                            <span class="stat-value">4개</span>
+                        </div>
+                        <div class="teacher-stat-card">
+                            <span class="stat-label">종합 평균 점수</span>
+                            <span class="stat-value">91점</span>
+                        </div>
+                    </div>
+                    <div class="teacher-table-card">
+                        <h3>반별 평균 수행 지표</h3>
+                        <table class="teacher-table">
+                            <thead>
+                                <tr><th>반 이름</th><th>학생 수</th><th>사용 교재</th><th>평균 점수</th><th style="text-align: right;">관리</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><strong>고등 영어 기초A</strong></td><td>32명</td><td>능률VOCA 어원편</td><td>94점</td><td style="text-align: right;"><button class="approve-btn" style="padding: 0.4rem 0.7rem; font-size: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white;">수정</button></td></tr>
+                                <tr><td><strong>수능 심화B</strong></td><td>28명</td><td>수능 필수 2000</td><td>88점</td><td style="text-align: right;"><button class="approve-btn" style="padding: 0.4rem 0.7rem; font-size: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white;">수정</button></td></tr>
+                                <tr><td><strong>중학 필수 단어반</strong></td><td>35명</td><td>중학 영단어</td><td>95점</td><td style="text-align: right;"><button class="approve-btn" style="padding: 0.4rem 0.7rem; font-size: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white;">수정</button></td></tr>
+                                <tr><td><strong>기초 영문법반</strong></td><td>33명</td><td>어원편 기초</td><td>82점</td><td style="text-align: right;"><button class="approve-btn" style="padding: 0.4rem 0.7rem; font-size: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white;">수정</button></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            } else if (tabName === 'assignment') {
+                html = `
+                    <div class="teacher-summary-grid">
+                        <div class="teacher-stat-card">
+                            <span class="stat-label">진행 중인 과제</span>
+                            <span class="stat-value">12개</span>
+                        </div>
+                        <div class="teacher-stat-card">
+                            <span class="stat-label">평균 제출률</span>
+                            <span class="stat-value">88%</span>
+                        </div>
+                    </div>
+                    <div class="teacher-table-card">
+                        <h3>배포 과제별 리포트</h3>
+                        <table class="teacher-table">
+                            <thead>
+                                <tr><th>과제명</th><th>대상 반</th><th>제출 현황</th><th>평균 점수</th><th>상태</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Day 12-15 복습</td><td>기초A</td><td>30 / 32</td><td>94점</td><td><span class="status-badge complete">마감</span></td></tr>
+                                <tr><td>필수 숙어 50개</td><td>심화B</td><td>22 / 28</td><td>88점</td><td><span class="status-badge active">진행중</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            } else if (tabName === 'textbook') {
+                html = `
+                    <div class="teacher-summary-grid">
+                        <div class="teacher-stat-card">
+                            <span class="stat-label">사용 중인 교재</span>
+                            <span class="stat-value">3권</span>
+                        </div>
+                        <div class="teacher-stat-card">
+                            <span class="stat-label">가장 인기있는 교재</span>
+                            <span class="stat-value">어원편</span>
+                        </div>
+                    </div>
+                    <div class="teacher-table-card">
+                        <h3>교재별 학습 성취도 통계</h3>
+                        <table class="teacher-table">
+                            <thead>
+                                <tr><th>교재명</th><th>사용 인원</th><th>완독률</th><th>평균 점수</th><th>난이도 체감</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>능률VOCA 어원편</td><td>84명</td><td>72%</td><td>91점</td><td>보통</td></tr>
+                                <tr><td>수능 필수 2000</td><td>44명</td><td>45%</td><td>86점</td><td>약간 어려움</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        teacherMenuBtn.forEach(btn => {
+            btn.addEventListener('click', () => {
+                showTeacherView(btn.dataset.view);
+            });
+        });
+
+        // 선생님 코드 만들기 및 관리 (localStorage를 사용하여 고정)
+        function generateTeacherCode() {
+            let code = localStorage.getItem('teacherCode');
+
+            if (!code) {
+                // 코드가 없으면 새로 만들기 (100,000 ~ 999,999)
+                code = Math.floor(100000 + Math.random() * 900000);
+                localStorage.setItem('teacherCode', code);
+            }
+
+            document.getElementById('teacherCodeDisplay').textContent = code;
+            return code;
+        }
+
+        function copyTeacherCode() {
+            const code = document.getElementById('teacherCodeDisplay').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('선생님 코드가 복사되었습니다: ' + code);
+            }).catch(err => {
+                console.error('복사 실패:', err);
+            });
+        }
+
+        // 학습 범위(Day) 조절 함수
+        function adjustDay(inputId, delta) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            let currentValue = parseInt(input.value) || 0;
+            let newValue = currentValue + delta;
+            if (newValue < 1) newValue = 1; // 최소값 1 유지
+            input.value = newValue;
+        }
+
+        // 과제 배포 및 유효성 검사
+        function submitAssignment() {
+            const startInput = document.getElementById('assignmentDayStart');
+            const endInput = document.getElementById('assignmentDayEnd');
+
+            if (!startInput || !endInput) return;
+
+            const dayStart = parseInt(startInput.value);
+            const dayEnd = parseInt(endInput.value);
+
+            if (dayEnd < dayStart) {
+                alert('학습 범위의 종료일(Day)은 시작일보다 작을 수 없습니다.');
+                endInput.focus();
+                return;
+            }
+
+            alert('과제가 성공적으로 배포되었습니다!');
+            showTeacherView('manageAssignments');
+        }
+
+        // 초기화
+        window.addEventListener('load', () => {
+            generateTeacherCode();
+            showTeacherView('class');
+        });
+
+        // 모달 제어 함수
+        function openAddStudentModal() {
+            console.log("Opening student selection modal...");
+            const modal = document.getElementById('addStudentModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.style.display = 'flex';
+            } else {
+                console.error("AddStudentModal element not found!");
+            }
+        }
+
+        function closeAddStudentModal() {
+            const modal = document.getElementById('addStudentModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.style.display = 'none';
+            }
+        }
+
+        function addSelectedStudents() {
+            const selectedCount = document.querySelectorAll('#addStudentModal .student-item-checkbox input:checked').length;
+            if (selectedCount > 0) {
+                alert(`${selectedCount}명의 학생이 반에 추가되었습니다.`);
+                closeAddStudentModal();
+            } else {
+                alert('추가할 학생을 선택해주세요.');
+            }
+        }
+    </script>
+</body>
+
+</html>
