@@ -211,7 +211,7 @@ function deactivateAll() {
     document.querySelectorAll('.quiz-container').forEach(qc => qc.classList.add('hidden'));
 
     // 특정 서브 선택 화면들만 숨김 (스택 방지)
-    const subSelections = ['studyDaySelection', 'daySelection', 'assignmentSection', 'memorizeContent'];
+    const subSelections = ['studyDaySelection', 'daySelection', 'assignmentSection', 'memorizeContent', 'studyPackSelection'];
     subSelections.forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.add('hidden');
@@ -456,7 +456,8 @@ const selectedPackTitle = document.getElementById('selectedPackTitle');
 const backToPackSelectionBtn = document.getElementById('backToPackSelectionBtn');
 const backToDaySelectionBtn = document.getElementById('backToDaySelectionBtn');
 
-let currentPack = '';
+let currentPack = 'etymology';
+let currentPackTitle = '능률VOCA 어원편 고등';
 let currentMemorizeSource = 'pack'; // 'pack' or 'wordbook'
 
 function showPackSelection() {
@@ -467,6 +468,7 @@ function showPackSelection() {
 
 function showDaySelection(packName, packTitleText) {
     currentPack = packName;
+    currentPackTitle = packTitleText;
     selectedPackTitle.textContent = packTitleText;
 
     memorizeSelection.classList.add('hidden');
@@ -480,9 +482,16 @@ function showDaySelection(packName, packTitleText) {
 function generateDayGrid() {
     dayGrid.innerHTML = '';
 
+    const isTrialPack = currentPack === 'etymology';
+
     for (let i = 1; i <= 30; i++) {
         const dayCard = document.createElement('div');
         dayCard.className = 'day-card';
+
+        const isLocked = isTrialPack && i > 1;
+        if (isLocked) {
+            dayCard.classList.add('locked');
+        }
 
         // 고정 데이터 (나중에 DB 연동 시 변경)
         let completedCount;
@@ -492,21 +501,25 @@ function generateDayGrid() {
         else completedCount = 5 - (i % 3);
 
         const isCompleted = completedCount === 30;
-        if (isCompleted) dayCard.classList.add('completed');
+        if (isCompleted && !isLocked) dayCard.classList.add('completed');
 
         const percentage = (completedCount / 30) * 100;
 
         dayCard.innerHTML = `
-            ${isCompleted ? '<span class="day-badge">🏅</span>' : ''}
+            ${isLocked ? '<span class="lock-icon">🔒</span>' : (isCompleted ? '<span class="day-badge">🏅</span>' : '')}
             <div class="day-number">Day ${i}</div>
-            <div class="day-stats">${completedCount}/30</div>
+            <div class="day-stats">${isLocked ? '잠김' : completedCount + '/30'}</div>
             <div class="day-progress-container">
-                <div class="day-progress-fill" style="width: ${percentage}%;"></div>
+                <div class="day-progress-fill" style="width: ${isLocked ? 0 : percentage}%;"></div>
             </div>
         `;
 
         dayCard.addEventListener('click', () => {
-            startMemorize(i);
+            if (isLocked) {
+                alert("단어팩 구매나 교재 구매인증 후 이용가능합니다");
+            } else {
+                startMemorize(i);
+            }
         });
 
         dayGrid.appendChild(dayCard);
@@ -696,7 +709,9 @@ document.getElementById('wordToMeaningAutoplayToggle').addEventListener('change'
 
 // 퀴즈 선택 화면 표시
 function showQuizSelection(keepExpanded = false) {
+    document.getElementById('studyCurrentPackName').textContent = currentPackTitle;
     document.getElementById('quizSelection').style.display = 'block';
+    document.getElementById('studyPackSelection').classList.add('hidden');
     document.getElementById('spellingQuiz').classList.add('hidden');
     document.getElementById('sentenceQuiz').classList.add('hidden');
     document.getElementById('wordToMeaningQuiz').classList.add('hidden');
@@ -711,6 +726,52 @@ function showQuizSelection(keepExpanded = false) {
         });
     }
 }
+
+// 학습 탭 단어팩 선택 화면
+function showStudyPackSelection() {
+    document.getElementById('quizSelection').style.display = 'none';
+    const studyPackSelection = document.getElementById('studyPackSelection');
+    studyPackSelection.classList.remove('hidden');
+
+    const studyPackList = document.getElementById('studyPackList');
+    studyPackList.innerHTML = '';
+
+    // 보유한 단어팩 리스트 (암기 탭의 데이터와 동일하게 구성)
+    const packs = [
+        { id: 'middle', title: '능률VOCA 어원편 중등', thumb: 'assets/middle_voca_thumb.png', progress: '15 / 60 Day' },
+        { id: 'etymology', title: '능률VOCA 어원편 고등', thumb: 'assets/etymology_voca_thumb.png', progress: '40 / 80 Day' },
+        { id: 'sat', title: '능률VOCA 수능 필수', thumb: 'assets/sat_voca_thumb.png', progress: '5 / 100 Day' }
+    ];
+
+    packs.forEach(pack => {
+        const card = document.createElement('div');
+        card.className = 'word-pack-card';
+        card.innerHTML = `
+            <div class="pack-thumbnail">
+                <img src="${pack.thumb}" alt="${pack.title}">
+            </div>
+            <div class="word-pack-content">
+                <div class="pack-title">${pack.title}</div>
+                <div class="pack-stat-item">
+                    <span class="stat-label">진행도</span>
+                    <span class="stat-value">${pack.progress}</span>
+                </div>
+            </div>
+        `;
+        card.addEventListener('click', () => {
+            currentPack = pack.id;
+            currentPackTitle = pack.title;
+            showQuizSelection();
+        });
+        studyPackList.appendChild(card);
+    });
+}
+
+// 학습 탭 내 이벤트 리스너 추가
+document.getElementById('changeStudyPackBtn').addEventListener('click', showStudyPackSelection);
+document.getElementById('backToQuizFromPackBtn').addEventListener('click', () => {
+    showQuizSelection();
+});
 
 // 스펠링 퀴즈 토글
 // 퀴즈 카드 토글 설정
@@ -837,9 +898,10 @@ function showStudyDaySelection(type) {
 
     // 타이틀 업데이트
     const title = selection.querySelector('.quiz-title');
-    if (type === 'spelling') title.textContent = '스펠링 퀴즈: Day 선택';
-    else if (type === 'wordToMeaning') title.textContent = '단어 퀴즈: Day 선택';
-    else if (type === 'sentence') title.textContent = '문장 퀴즈: Day 선택';
+    const packPrefix = `[${currentPackTitle}] `;
+    if (type === 'spelling') title.textContent = packPrefix + '스펠링 퀴즈: Day 선택';
+    else if (type === 'wordToMeaning') title.textContent = packPrefix + '단어 퀴즈: Day 선택';
+    else if (type === 'sentence') title.textContent = packPrefix + '문장 퀴즈: Day 선택';
 
     generateStudyDayGrid(type);
 }

@@ -36,7 +36,7 @@
                 <!-- Learning Progress Card -->
                 <div class="home-card status-card">
                     <div class="status-header">
-                        <span class="book-tag">학습 중</span>
+                        <span class="book-tag">현재 학습 중</span>
                         <h3 class="current-book">능률VOCA 어원편 고등</h3>
                     </div>
                     <div class="progress-details">
@@ -568,8 +568,36 @@
 
         <!-- Study Mode -->
         <div id="studyMode" class="mode-section">
+            <!-- Study Pack Selection -->
+            <div id="studyPackSelection" class="quiz-selection hidden">
+                <div class="quiz-header"
+                    style="background: transparent; border: none; padding: 0.5rem 1.5rem 1rem 1.5rem;">
+                    <button class="back-btn" id="backToQuizFromPackBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                    </button>
+                    <h2 class="quiz-title"
+                        style="margin: 0; font-size: 1.2rem; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 700;">
+                        학습 단어팩 선택</h2>
+                </div>
+                <div class="word-pack-container" id="studyPackList">
+                    <!-- Owned packs will be shown here -->
+                </div>
+            </div>
+
             <!-- Quiz Selection -->
             <div id="quizSelection" class="quiz-selection">
+                <div class="current-pack-indicator">
+                    <div class="current-pack-info">
+                        <span class="indicator-label">현재 학습 중</span>
+                        <h2 class="current-pack-name" id="studyCurrentPackName">능률VOCA 어원편 고등</h2>
+                    </div>
+                    <button class="change-pack-btn" id="changeStudyPackBtn">변경</button>
+                </div>
+
                 <h2 class="section-title">학습 모드를 선택하세요</h2>
                 <div class="quiz-options">
                     <div class="quiz-option-card" id="spellingQuizCard">
@@ -1345,6 +1373,5 @@
 
     <script src="script.js"></script>
 </body>
-
 
 </html>

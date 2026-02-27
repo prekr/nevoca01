@@ -524,6 +524,32 @@ header h1 {
     color: #ffd700;
 }
 
+.day-card.locked {
+    opacity: 0.6;
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    cursor: default;
+}
+
+.day-card.locked:hover {
+    transform: none;
+    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.day-card.locked .day-number,
+.day-card.locked .day-stats {
+    color: var(--text-secondary);
+}
+
+.lock-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.2rem;
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+}
+
 .word-pack-info {
     display: flex;
     flex-direction: column;
@@ -595,6 +621,55 @@ header h1 {
 .pack-buy-btn:hover {
     filter: brightness(1.2);
     transform: scale(1.05);
+}
+
+/* Study Mode Pack Indicator */
+.current-pack-indicator {
+    background: rgba(102, 126, 234, 0.1);
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    border-radius: 15px;
+    padding: 1rem 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    animation: fadeIn 0.5s ease;
+}
+
+.current-pack-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.indicator-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.current-pack-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.change-pack-btn {
+    background: transparent;
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.change-pack-btn:hover {
+    background: var(--accent-color);
+    color: white;
 }
 
 .pack-trial-btn:hover,
