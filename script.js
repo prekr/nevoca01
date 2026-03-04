@@ -204,6 +204,14 @@ function deactivateAll() {
     homeMode.classList.remove('active');
     myMode.classList.remove('active');
     wordPackMode.classList.remove('active');
+    if (myWordbookManageMode) myWordbookManageMode.classList.remove('active');
+    const notificationSettingsMode = document.getElementById('notificationSettingsMode');
+    if (notificationSettingsMode) notificationSettingsMode.classList.remove('active');
+    const accountSecurityMode = document.getElementById('accountSecurityMode');
+    if (accountSecurityMode) accountSecurityMode.classList.remove('active');
+    const dataResetMode = document.getElementById('dataResetMode');
+    if (dataResetMode) dataResetMode.classList.remove('active');
+
     // 모든 모드 섹션을 찾아 비활성화
     document.querySelectorAll('.mode-section').forEach(m => m.classList.remove('active'));
 
@@ -269,8 +277,512 @@ myNavBtn.addEventListener('click', () => {
     myMode.classList.add('active');
 });
 
+// ===== 내 단어장 관리 로직 =====
+
+// toast alert
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.remove('hidden');
+    toast.classList.add('show');
+
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.classList.add('hidden'), 400);
+    }, 2000);
+}
+
+// 단어장 선택 모달 관련
+let currentWordToSave = null;
+function openWordbookSelector(english, korean) {
+    currentWordToSave = { english, korean };
+    const modal = document.getElementById('wordbookSelectModal');
+    const list = document.getElementById('wordbookSelectList');
+    if (!modal || !list) return;
+
+    list.innerHTML = '';
+    myWordbooks.forEach(book => {
+        const item = document.createElement('div');
+        item.className = 'manage-item';
+        item.style.cursor = 'pointer';
+        item.innerHTML = `
+            <div class="manage-item-info">
+                <div class="manage-item-icon" style="background: ${book.color}22; color: ${book.color}">${book.emoji}</div>
+                <div class="manage-item-text">
+                    <div class="manage-item-name">${book.name}</div>
+                    <div class="manage-item-count">단어: ${book.count}개 | 복습: ${book.reviewCount}회</div>
+                </div>
+            </div>
+            <div class="manage-item-actions">
+                <span style="color: var(--accent-color); font-weight: 700;">+ 추가</span>
+            </div>
+        `;
+
+        item.addEventListener('click', () => {
+            book.count++;
+            modal.classList.add('hidden');
+            showToast(`'${english}' 단어가 '${book.name}' 단어장에 추가되었습니다.`);
+
+            if (typeof renderWordbookManageList === 'function' && document.getElementById('myWordbookManageMode').classList.contains('active')) {
+                renderWordbookManageList();
+            }
+            updateHomeWordbooks();
+        });
+
+        list.appendChild(item);
+    });
+
+    modal.classList.remove('hidden');
+}
+
+// 모달 닫기 이벤트들
+const closeWordbookSelectModal = document.getElementById('closeWordbookSelectModal');
+if (closeWordbookSelectModal) {
+    closeWordbookSelectModal.addEventListener('click', () => {
+        document.getElementById('wordbookSelectModal').classList.add('hidden');
+    });
+}
+const wordbookSelectModal = document.getElementById('wordbookSelectModal');
+if (wordbookSelectModal) {
+    wordbookSelectModal.addEventListener('click', (e) => {
+        if (e.target === wordbookSelectModal) {
+            wordbookSelectModal.classList.add('hidden');
+        }
+    });
+}
+
+// 퀴즈 모드 단어 저장 버튼들 이벤트 연결
+const quizSaveBtns = ['spellingSaveBtn', 'sentenceSaveBtn', 'wordMeaningSaveBtn'];
+quizSaveBtns.forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const word = vocabulary[quizIndex];
+            if (word) {
+                openWordbookSelector(word.english, word.korean);
+            }
+        });
+    }
+});
+
+// 내 단어장 데이터
+let myWordbooks = [
+    { id: 1, name: "중요 단어", color: "#ffd700", emoji: "⭐", count: 45, reviewCount: 12 },
+    { id: 2, name: "헷갈리는 단어", color: "#ff7f50", emoji: "🔥", count: 32, reviewCount: 8 },
+    { id: 3, name: "복습 예정", color: "#4db8ff", emoji: "📝", count: 18, reviewCount: 5 }
+];
+
+const openWordbookManageBtn = document.getElementById('openWordbookManageBtn');
+const myWordbookManageMode = document.getElementById('myWordbookManageMode');
+const backToMyFromManageBtn = document.getElementById('backToMyFromManageBtn');
+const wordbookManageList = document.getElementById('wordbookManageList');
+const addNewBookBtn = document.getElementById('addNewBookBtn');
+
+if (openWordbookManageBtn) {
+    openWordbookManageBtn.addEventListener('click', () => {
+        deactivateAll();
+        if (myWordbookManageMode) {
+            myWordbookManageMode.classList.add('active');
+            renderWordbookManageList();
+        }
+    });
+}
+
+if (backToMyFromManageBtn) {
+    backToMyFromManageBtn.addEventListener('click', () => {
+        deactivateAll();
+        myNavBtn.classList.add('active');
+        myMode.classList.add('active');
+    });
+}
+
+function renderWordbookManageList() {
+    if (!wordbookManageList) return;
+    wordbookManageList.innerHTML = '';
+
+    myWordbooks.forEach(book => {
+        const item = document.createElement('div');
+        item.className = 'manage-item';
+        item.innerHTML = `
+            <div class="manage-item-info">
+                <div class="manage-item-icon" style="background: ${book.color}22; color: ${book.color}">${book.emoji}</div>
+                <div class="manage-item-text">
+                    <div class="manage-item-name">${book.name}</div>
+                    <div class="manage-item-count">단어: ${book.count}개 | 복습: ${book.reviewCount}회</div>
+                </div>
+            </div>
+            <div class="manage-item-actions">
+                <button class="manage-rename-btn" data-id="${book.id}">이름 변경</button>
+                <button class="manage-delete-btn" data-id="${book.id}">삭제</button>
+            </div>
+        `;
+
+        // 이름 변경 로직
+        item.querySelector('.manage-rename-btn').addEventListener('click', () => {
+            const newName = prompt('단어장 이름을 입력하세요:', book.name);
+            if (newName && newName.trim() !== '') {
+                book.name = newName.trim();
+                renderWordbookManageList();
+                updateHomeWordbooks();
+            }
+        });
+
+        // 삭제 로직
+        item.querySelector('.manage-delete-btn').addEventListener('click', () => {
+            if (confirm(`'${book.name}' 단어장을 삭제하시겠습니까?`)) {
+                myWordbooks = myWordbooks.filter(b => b.id !== book.id);
+                renderWordbookManageList();
+                updateHomeWordbooks();
+            }
+        });
+
+        wordbookManageList.appendChild(item);
+    });
+}
+
+if (addNewBookBtn) {
+    addNewBookBtn.addEventListener('click', () => {
+        const name = prompt('새 단어장 이름을 입력하세요:');
+        if (name && name.trim() !== '') {
+            const newBook = {
+                id: Date.now(),
+                name: name.trim(),
+                color: '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0'),
+                emoji: '📚',
+                count: 0,
+                reviewCount: 0
+            };
+            myWordbooks.push(newBook);
+            renderWordbookManageList();
+            updateHomeWordbooks();
+        }
+    });
+}
+
+// 홈 화면의 단어장 리스트 동적으로 업데이트하는 함수
+function updateHomeWordbooks() {
+    const homeWordbookList = document.querySelector('.wordbook-list');
+    if (!homeWordbookList) return;
+
+    // 기존 아이템들 삭제
+    homeWordbookList.innerHTML = '';
+
+    myWordbooks.forEach(book => {
+        const item = document.createElement('div');
+        item.className = 'wordbook-item';
+        item.style.setProperty('--book-color', book.color);
+        item.innerHTML = `
+            <div class="wordbook-cover">${book.emoji}</div>
+            <span class="wordbook-name">${book.name}</span>
+            <span class="wordbook-reviews">${book.reviewCount}회 복습</span>
+        `;
+        item.addEventListener('click', () => showVocabDetail(book.name));
+        homeWordbookList.appendChild(item);
+    });
+}
+
+// 초기 홈 화면 업데이트 실행
+updateHomeWordbooks();
+
 // 단어장 상세 데이터 (샘플)
 let currentVocabWords = [];
+
+// ===== 학습 알림 설정 로직 =====
+
+const openNotificationSettingsBtn = document.getElementById('openNotificationSettingsBtn');
+const notificationSettingsMode = document.getElementById('notificationSettingsMode');
+const backToMyFromNotificationBtn = document.getElementById('backToMyFromNotificationBtn');
+
+if (openNotificationSettingsBtn) {
+    openNotificationSettingsBtn.addEventListener('click', () => {
+        deactivateAll();
+        if (notificationSettingsMode) {
+            notificationSettingsMode.classList.add('active');
+        }
+    });
+}
+
+if (backToMyFromNotificationBtn) {
+    backToMyFromNotificationBtn.addEventListener('click', () => {
+        deactivateAll();
+        myNavBtn.classList.add('active');
+        myMode.classList.add('active');
+    });
+}
+
+// 각 토글 및 설정 변경 시 토스트 알림
+const notificationToggles = [
+    'pushNotificationToggle',
+    'dailyMemorizeToggle', 'reviewRecommendationToggle', 'weeklyReportToggle'
+];
+
+notificationToggles.forEach(id => {
+    const toggle = document.getElementById(id);
+    if (toggle) {
+        toggle.addEventListener('change', () => {
+            const label = toggle.closest('.toggle-setting')?.querySelector('.setting-title')?.textContent || '설정';
+            showToast(`${label}이(가) ${toggle.checked ? '활성화' : '비활성화'}되었습니다.`);
+        });
+    }
+});
+
+const nightStartTime = document.getElementById('nightStartTime');
+const nightEndTime = document.getElementById('nightEndTime');
+const nightTimeRangeArea = document.getElementById('nightTimeRangeArea');
+const nightNotificationToggle = document.getElementById('nightNotificationToggle');
+
+if (nightNotificationToggle && nightTimeRangeArea) {
+    // 초기 상태 반영
+    nightTimeRangeArea.style.opacity = nightNotificationToggle.checked ? '1' : '0.4';
+    nightTimeRangeArea.style.pointerEvents = nightNotificationToggle.checked ? 'auto' : 'none';
+
+    nightNotificationToggle.addEventListener('change', () => {
+        nightTimeRangeArea.style.opacity = nightNotificationToggle.checked ? '1' : '0.4';
+        nightTimeRangeArea.style.pointerEvents = nightNotificationToggle.checked ? 'auto' : 'none';
+        showToast(`야간 알림 제한이 ${nightNotificationToggle.checked ? '활성화' : '비활성화'}되었습니다.`);
+    });
+}
+
+if (nightStartTime) {
+    nightStartTime.addEventListener('change', () => {
+        showToast(`제한 시작 시간이 ${nightStartTime.value}로 설정되었습니다.`);
+    });
+}
+if (nightEndTime) {
+    nightEndTime.addEventListener('change', () => {
+        showToast(`제한 종료 시간이 ${nightEndTime.value}로 설정되었습니다.`);
+    });
+}
+
+const memorizeTimeInput = document.getElementById('memorizeTimeInput');
+if (memorizeTimeInput) {
+    memorizeTimeInput.addEventListener('change', () => {
+        showToast(`알림 시간이 ${memorizeTimeInput.value}로 변경되었습니다.`);
+    });
+}
+
+// ===== 계정 보안 로직 =====
+
+const openAccountSecurityBtn = document.getElementById('openAccountSecurityBtn');
+const accountSecurityMode = document.getElementById('accountSecurityMode');
+const backToMyFromSecurityBtn = document.getElementById('backToMyFromSecurityBtn');
+
+if (openAccountSecurityBtn) {
+    openAccountSecurityBtn.addEventListener('click', () => {
+        deactivateAll();
+        if (accountSecurityMode) {
+            accountSecurityMode.classList.add('active');
+        }
+    });
+}
+
+if (backToMyFromSecurityBtn) {
+    backToMyFromSecurityBtn.addEventListener('click', () => {
+        deactivateAll();
+        myNavBtn.classList.add('active');
+        myMode.classList.add('active');
+    });
+}
+
+// 비밀번호 변경 버튼
+const changePasswordBtn = document.getElementById('changePasswordBtn');
+if (changePasswordBtn) {
+    changePasswordBtn.addEventListener('click', () => {
+        const currentPw = prompt('현재 비밀번호를 입력해주세요:');
+        if (currentPw) {
+            const newPw = prompt('새 비밀번호를 입력해주세요:');
+            if (newPw) {
+                showToast('비밀번호가 성공적으로 변경되었습니다.');
+            }
+        }
+    });
+}
+
+// 로그아웃 버튼
+const logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+        if (confirm('정말 로그아웃 하시겠습니까?')) {
+            showToast('성공적으로 로그아웃되었습니다.');
+            setTimeout(() => location.reload(), 1500);
+        }
+    });
+}
+
+// 2단계 인증 토글
+const twoFactorAuthToggle = document.getElementById('twoFactorAuthToggle');
+if (twoFactorAuthToggle) {
+    twoFactorAuthToggle.addEventListener('change', () => {
+        showToast(`2단계 인증이 ${twoFactorAuthToggle.checked ? '설정' : '해제'}되었습니다.`);
+    });
+}
+
+// ===== 데이터 초기화 로직 =====
+
+const openDataResetBtn = document.getElementById('openDataResetBtn');
+const dataResetMode = document.getElementById('dataResetMode');
+const backToMyFromResetBtn = document.getElementById('backToMyFromResetBtn');
+
+if (openDataResetBtn) {
+    openDataResetBtn.addEventListener('click', () => {
+        deactivateAll();
+        if (dataResetMode) {
+            dataResetMode.classList.add('active');
+        }
+    });
+}
+
+if (backToMyFromResetBtn) {
+    backToMyFromResetBtn.addEventListener('click', () => {
+        deactivateAll();
+        myNavBtn.classList.add('active');
+        myMode.classList.add('active');
+    });
+}
+
+// 개별 초기화 버튼들
+const resetWordbookBtn = document.getElementById('resetWordbookBtn');
+if (resetWordbookBtn) {
+    resetWordbookBtn.addEventListener('click', () => {
+        if (confirm('모든 단어장과 저장된 단어가 삭제됩니다. 정말 초기화하시겠습니까?')) {
+            myWordbooks = [];
+            updateHomeWordbooks();
+            showToast('단어장이 초기화되었습니다.');
+        }
+    });
+}
+
+const resetProgressBtn = document.getElementById('resetProgressBtn');
+if (resetProgressBtn) {
+    resetProgressBtn.addEventListener('click', () => {
+        if (confirm('학습 진도와 성취도 기록이 모두 삭제됩니다. 정말 초기화하시겠습니까?')) {
+            studiedWords = new Set();
+            studiedCount.textContent = '0';
+            showToast('학습 진도가 초기화되었습니다.');
+        }
+    });
+}
+
+const resetAllDataBtn = document.getElementById('resetAllDataBtn');
+if (resetAllDataBtn) {
+    resetAllDataBtn.addEventListener('click', () => {
+        if (confirm('앱의 모든 데이터가 초기화되며 처음 상태로 돌아갑니다. 이 작업은 되돌릴 수 없습니다. 정말 진행하시겠습니까?')) {
+            showToast('모든 데이터를 초기화 중입니다...');
+            setTimeout(() => {
+                localStorage.clear();
+                location.reload();
+            }, 2000);
+        }
+    });
+}
+
+// ===== 학습 스트레이크 달력 로직 =====
+
+const streakCalendarModal = document.getElementById('streakCalendarModal');
+const openStreakCalendar = document.getElementById('openStreakCalendar');
+const closeStreakCalendarModal = document.getElementById('closeStreakCalendarModal');
+const calendarMonthTitle = document.getElementById('calendarMonthTitle');
+const calendarGrid = document.getElementById('calendarGrid');
+const prevMonthBtn = document.getElementById('prevMonth');
+const nextMonthBtn = document.getElementById('nextMonth');
+
+let calendarDate = new Date(2026, 2, 1); // 2026년 3월 (Month는 0부터 시작)
+
+function generateCalendar(date) {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+
+    // 헤더 업데이트
+    calendarMonthTitle.textContent = `${year}년 ${month + 1}월`;
+
+    // 그리드 초기화
+    calendarGrid.innerHTML = '';
+
+    // 해당 월의 첫 날과 마지막 날 계산
+    const firstDay = new Date(year, month, 1).getDay();
+    const lastDate = new Date(year, month + 1, 0).getDate();
+
+    // 오늘 날짜 정보 (2026년 3월 4일 가정)
+    const today = new Date(2026, 2, 4);
+
+    // 빈 칸 추가 (첫 주)
+    for (let i = 0; i < firstDay; i++) {
+        const emptyDiv = document.createElement('div');
+        emptyDiv.className = 'calendar-day empty';
+        calendarGrid.appendChild(emptyDiv);
+    }
+
+    // 일자 추가
+    for (let d = 1; d <= lastDate; d++) {
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'calendar-day';
+        dayDiv.textContent = d;
+
+        const currentIterDate = new Date(year, month, d);
+
+        // 오늘 날짜 표시
+        if (year === today.getFullYear() && month === today.getMonth() && d === today.getDate()) {
+            dayDiv.classList.add('today');
+        }
+
+        // 학습 완료 및 스트레이크 시뮬레이션 (3월인 경우)
+        if (year === 2026 && month === 2) {
+            // 3월 1일 ~ 4일 연속 학습 (오늘이 4일이므로 4일 누적)
+            if (d <= 4) {
+                dayDiv.classList.add('streak-active');
+                if (d === 4) dayDiv.classList.add('highlight'); // 오늘 강조
+            }
+        } else if (year === 2026 && month === 1) {
+            // 2월 학습 데이터 시뮬레이션
+            const activeDays = [6, 9, 19, 21, 23];
+            const streakDays = [12, 13, 16, 17, 26, 27, 28];
+
+            if (activeDays.includes(d)) {
+                dayDiv.classList.add('active');
+            } else if (streakDays.includes(d)) {
+                dayDiv.classList.add('streak-active');
+            }
+        }
+
+        calendarGrid.appendChild(dayDiv);
+    }
+}
+
+if (openStreakCalendar) {
+    openStreakCalendar.addEventListener('click', () => {
+        streakCalendarModal.classList.remove('hidden');
+        generateCalendar(calendarDate);
+    });
+}
+
+if (closeStreakCalendarModal) {
+    closeStreakCalendarModal.addEventListener('click', () => {
+        streakCalendarModal.classList.add('hidden');
+    });
+}
+
+streakCalendarModal.addEventListener('click', (e) => {
+    if (e.target === streakCalendarModal) {
+        streakCalendarModal.classList.add('hidden');
+    }
+});
+
+if (prevMonthBtn) {
+    prevMonthBtn.addEventListener('click', () => {
+        calendarDate.setMonth(calendarDate.getMonth() - 1);
+        generateCalendar(calendarDate);
+    });
+}
+
+if (nextMonthBtn) {
+    nextMonthBtn.addEventListener('click', () => {
+        calendarDate.setMonth(calendarDate.getMonth() + 1);
+        generateCalendar(calendarDate);
+    });
+}
+
 
 // 단어장 상세 화면 표시
 function showVocabDetail(bookName) {
@@ -356,14 +868,27 @@ document.querySelectorAll('.filter-chip').forEach(chip => {
     });
 });
 
-// 홈 화면의 단어장 아이템 클릭 이벤트
-document.querySelectorAll('.wordbook-item:not(.add-wordbook)').forEach(item => {
-    item.addEventListener('click', () => {
-        const bookName = item.querySelector('.wordbook-name').textContent;
-        showVocabDetail(bookName);
+// 홈 화면의 단어장 섹션 "모두보기" 버튼
+const viewAllWordbooksBtn = document.querySelector('.home-section:nth-of-type(4) .view-all-btn');
+if (viewAllWordbooksBtn) {
+    viewAllWordbooksBtn.addEventListener('click', () => {
+        deactivateAll();
+        myNavBtn.classList.add('active');
+        myWordbookManageMode.classList.add('active');
+        renderWordbookManageList();
     });
-});
+}
 
+// 홈 화면의 "새 목록" 추가 버튼
+const addWordbookBtnHome = document.querySelector('.wordbook-item.add-wordbook');
+if (addWordbookBtnHome) {
+    addWordbookBtnHome.addEventListener('click', () => {
+        deactivateAll();
+        myNavBtn.classList.add('active');
+        myWordbookManageMode.classList.add('active');
+        renderWordbookManageList();
+    });
+}
 // 단어장 상세에서 돌아가기
 document.getElementById('backFromVocabDetail').addEventListener('click', () => {
     deactivateAll();
@@ -403,21 +928,28 @@ searchCloseBtn.addEventListener('click', () => {
     searchContainer.classList.add('hidden');
 });
 
-// ===== 즐겨찾기(별표) 토글 로직 =====
+// ===== 즐겨찾기(별표) 클릭 시 단어장 추가 로직 =====
 const favoriteBtn = document.getElementById('favoriteBtn');
 favoriteBtn.addEventListener('click', (e) => {
     e.stopPropagation(); // 카드 뒤집기 방지
-    favoriteBtn.classList.toggle('favorited');
 
-    // SVG 변경 (필요 시)
+    // 현재 암기 중인 단어 정보 가져오기
+    const word = vocabulary[currentIndex];
+    if (word) {
+        openWordbookSelector(word.english, word.korean);
+    }
+
+    // 시각적 피드백 (잠시 노란색으로 반짝임)
+    favoriteBtn.classList.add('favorited');
     const svg = favoriteBtn.querySelector('svg');
-    if (favoriteBtn.classList.contains('favorited')) {
-        svg.setAttribute('fill', '#ffd700');
-        svg.setAttribute('stroke', '#ffd700');
-    } else {
+    svg.setAttribute('fill', '#ffd700');
+    svg.setAttribute('stroke', '#ffd700');
+
+    setTimeout(() => {
+        favoriteBtn.classList.remove('favorited');
         svg.setAttribute('fill', 'none');
         svg.setAttribute('stroke', 'currentColor');
-    }
+    }, 500);
 });
 
 // ===== 오디오 재생 로직 (TTS) =====
@@ -1837,6 +2369,18 @@ document.getElementById('homeAssignmentCard').addEventListener('click', () => {
     // 2. 과제 학습 섹션 표시
     showAssignmentLearning();
 });
+
+// 홈 화면 학습 이어가기 버튼 클릭 시 암기 모드로 이동
+const continueBtn = document.getElementById('continueLearningBtn');
+if (continueBtn) {
+    continueBtn.addEventListener('click', () => {
+        deactivateAll();
+        memorizeNavBtn.classList.add('active');
+        memorizeMode.classList.add('active');
+        // 현재 예시로 설정된 어원편으로 이동
+        showDaySelection('etymology', '능률VOCA 어원편 고등');
+    });
+}
 
 // ===== Teacher Mode Logic =====
 const enterTeacherModeBtn = document.getElementById('enterTeacherModeBtn');

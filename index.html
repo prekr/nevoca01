@@ -35,17 +35,40 @@
             <div class="home-container">
                 <!-- Learning Progress Card -->
                 <div class="home-card status-card">
-                    <div class="status-header">
-                        <span class="book-tag">현재 학습 중</span>
-                        <h3 class="current-book">능률VOCA 어원편 고등</h3>
-                    </div>
-                    <div class="progress-details">
-                        <div class="progress-text">
-                            <span class="day-info">Day 12</span>
-                            <span class="percentage">68%</span>
+                    <div class="status-main-simple">
+                        <div class="book-info-simple">
+                            <span class="status-badge-simple">현재 학습 중</span>
+                            <h3 class="current-book-simple">능률VOCA 어원편 고등</h3>
                         </div>
-                        <div class="home-progress-bar">
-                            <div class="home-progress-fill" style="width: 68%;"></div>
+                        <div class="memorized-info-simple">
+                            <span class="memorized-count-simple"><strong>756</strong> / 1,200</span>
+                            <span class="memorized-label-simple">단어 암기됨</span>
+                        </div>
+                    </div>
+
+                    <div class="status-progress-simple">
+                        <div class="progress-item-simple">
+                            <div class="progress-header-simple">
+                                <span class="progress-label-simple">단어 암기율</span>
+                                <span class="progress-value-simple">63%</span>
+                            </div>
+                            <div class="home-progress-bar">
+                                <div class="home-progress-fill" style="width: 63%;"></div>
+                            </div>
+                        </div>
+                        <div class="progress-item-simple">
+                            <div class="progress-header-simple">
+                                <span class="progress-label-simple">학습 진도율</span>
+                                <span class="progress-value-simple">82%</span>
+                            </div>
+                            <div class="home-progress-bar">
+                                <div class="home-progress-fill"
+                                    style="width: 82%; background: linear-gradient(90deg, #f093fb, #f5576c);"></div>
+                            </div>
+                        </div>
+                        <div class="progress-footer-simple" style="margin-top: -0.5rem;">
+                            <div class="footer-stats"></div>
+                            <button class="continue-btn-simple" id="continueLearningBtn">학습 이어하기 ➔</button>
                         </div>
                     </div>
                 </div>
@@ -75,7 +98,7 @@
                     <div class="home-card stat-summary-card">
                         <div class="stat-icon">🔥</div>
                         <div class="stat-info">
-                            <span class="stat-value">15일</span>
+                            <span class="stat-value">7일</span>
                             <span class="stat-label">연속 학습 중</span>
                             <div class="comparison-badge positive">
                                 <span class="comparison-text">평균 대비 +3일</span>
@@ -207,7 +230,6 @@
                 <div class="home-section">
                     <div class="section-header">
                         <h3 class="section-title">내 단어장</h3>
-                        <p class="section-subtitle">별표 눌러 추가한 단어들</p>
                         <button class="view-all-btn">모두보기</button>
                     </div>
                     <div class="wordbook-list">
@@ -222,10 +244,6 @@
                         <div class="wordbook-item" style="--book-color: #4db8ff;">
                             <div class="wordbook-cover">📝</div>
                             <span class="wordbook-name">복습 예정</span>
-                        </div>
-                        <div class="wordbook-item add-wordbook">
-                            <div class="wordbook-cover">+</div>
-                            <span class="wordbook-name">새 목록</span>
                         </div>
                     </div>
                 </div>
@@ -323,23 +341,24 @@
                 <h2 class="section-title">학습한 단어팩을 선택하세요</h2>
                 <div class="word-pack-container">
                     <div class="word-pack-card memorize-pack-btn" data-pack="middle">
-                        <div class="pack-thumbnail thumb-middle">
-                            <img src="assets/middle_voca_thumb.png" alt="능률VOCA 어원편 중등">
+                        <div class="package-thumbnail-area">
+                            <div class="diag-book" style="top: 17px; left: 12px;"><img
+                                    src="assets/middle_voca_thumb.png" alt="능률VOCA 어원편 중등"></div>
                         </div>
                         <div class="word-pack-content">
                             <div class="pack-title">능률VOCA 어원편 중등</div>
                             <div class="pack-stats-grid">
                                 <div class="pack-stat-item">
-                                    <span class="stat-label">진행도</span>
-                                    <span class="stat-value">15 / 60 Day</span>
-                                </div>
-                                <div class="pack-stat-item">
-                                    <span class="stat-label">획득 메달</span>
-                                    <span class="stat-value medal-value">🏅 12개</span>
-                                </div>
-                                <div class="pack-stat-item">
                                     <span class="stat-label">암기율</span>
-                                    <span class="stat-value">25%</span>
+                                    <span class="stat-value" style="color: var(--accent-color);">26%</span>
+                                </div>
+                                <div class="pack-stat-item">
+                                    <span class="stat-label">진도율</span>
+                                    <span class="stat-value" style="color: #f093fb;">35%</span>
+                                </div>
+                                <div class="pack-stat-item">
+                                    <span class="stat-label">암기 단어</span>
+                                    <span class="stat-value">156 / 600</span>
                                 </div>
                             </div>
                             <div class="pack-progress-container">
@@ -349,23 +368,24 @@
                         </div>
                     </div>
                     <div class="word-pack-card memorize-pack-btn" data-pack="etymology">
-                        <div class="pack-thumbnail thumb-etymology">
-                            <img src="assets/etymology_voca_thumb.png" alt="능률VOCA 어원편 고등">
+                        <div class="package-thumbnail-area">
+                            <div class="diag-book" style="top: 17px; left: 12px;"><img
+                                    src="assets/etymology_voca_thumb.png" alt="능률VOCA 어원편 고등"></div>
                         </div>
                         <div class="word-pack-content">
                             <div class="pack-title">능률VOCA 어원편 고등</div>
                             <div class="pack-stats-grid">
                                 <div class="pack-stat-item">
-                                    <span class="stat-label">진행도</span>
-                                    <span class="stat-value">40 / 80 Day</span>
-                                </div>
-                                <div class="pack-stat-item">
-                                    <span class="stat-label">획득 메달</span>
-                                    <span class="stat-value medal-value">🏅 35개</span>
-                                </div>
-                                <div class="pack-stat-item">
                                     <span class="stat-label">암기율</span>
-                                    <span class="stat-value">50%</span>
+                                    <span class="stat-value" style="color: var(--accent-color);">38%</span>
+                                </div>
+                                <div class="pack-stat-item">
+                                    <span class="stat-label">진도율</span>
+                                    <span class="stat-value" style="color: #f093fb;">52%</span>
+                                </div>
+                                <div class="pack-stat-item">
+                                    <span class="stat-label">암기 단어</span>
+                                    <span class="stat-value">452 / 1200</span>
                                 </div>
                             </div>
                             <div class="pack-progress-container">
@@ -375,23 +395,24 @@
                         </div>
                     </div>
                     <div class="word-pack-card memorize-pack-btn" data-pack="sat">
-                        <div class="pack-thumbnail thumb-sat">
-                            <img src="assets/sat_voca_thumb.png" alt="능률VOCA 수능 필수">
+                        <div class="package-thumbnail-area">
+                            <div class="diag-book diag-1"><img src="assets/etymology_voca_thumb.png" alt="Book 1"></div>
+                            <div class="diag-book diag-2"><img src="assets/sat_voca_thumb.png" alt="Book 2"></div>
                         </div>
                         <div class="word-pack-content">
-                            <div class="pack-title">능률VOCA 수능 필수</div>
+                            <div class="pack-title">내신+수능대비 패키지</div>
                             <div class="pack-stats-grid">
                                 <div class="pack-stat-item">
-                                    <span class="stat-label">진행도</span>
-                                    <span class="stat-value">5 / 100 Day</span>
-                                </div>
-                                <div class="pack-stat-item">
-                                    <span class="stat-label">획득 메달</span>
-                                    <span class="stat-value medal-value">🏅 3개</span>
-                                </div>
-                                <div class="pack-stat-item">
                                     <span class="stat-label">암기율</span>
-                                    <span class="stat-value">5%</span>
+                                    <span class="stat-value" style="color: var(--accent-color);">5%</span>
+                                </div>
+                                <div class="pack-stat-item">
+                                    <span class="stat-label">진도율</span>
+                                    <span class="stat-value" style="color: #f093fb;">12%</span>
+                                </div>
+                                <div class="pack-stat-item">
+                                    <span class="stat-label">암기 단어</span>
+                                    <span class="stat-value">105 / 2100</span>
                                 </div>
                             </div>
                             <div class="pack-progress-container">
@@ -729,7 +750,7 @@
                 <div class="quiz-content">
                     <div class="quiz-meta-info">
                         <span class="failure-count" id="spellingFailureCount">0번 틀림</span>
-                        <button class="save-card-btn">
+                        <button class="save-card-btn" id="spellingSaveBtn">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -796,7 +817,7 @@
                 <div class="quiz-content">
                     <div class="quiz-meta-info">
                         <span class="failure-count" id="sentenceFailureCount">0번 틀림</span>
-                        <button class="save-card-btn">
+                        <button class="save-card-btn" id="sentenceSaveBtn">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -884,7 +905,7 @@
                 <div class="quiz-content">
                     <div class="quiz-meta-info">
                         <span class="failure-count" id="meaningFailureCount">0번 틀림</span>
-                        <button class="save-card-btn">
+                        <button class="save-card-btn" id="wordMeaningSaveBtn">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -1033,60 +1054,63 @@
                 <div class="word-pack-container">
                     <!-- 중등 -->
                     <div class="word-pack-card">
-                        <div class="pack-thumbnail thumb-middle">
-                            <img src="assets/middle_voca_thumb.png" alt="능률VOCA 어원편 중등">
+                        <div class="package-thumbnail-area">
+                            <div class="diag-book" style="top: 17px; left: 12px;"><img
+                                    src="assets/middle_voca_thumb.png" alt="능률VOCA 어원편 중등"></div>
                         </div>
                         <div class="word-pack-content">
                             <div class="word-pack-info">
                                 <div class="pack-title">능률VOCA 어원편 중등</div>
                                 <div class="price-group">
-                                    <div class="pack-price">9,900원</div>
+                                    <div class="pack-price">4,900원</div>
                                     <button class="pack-buy-btn">구매하기</button>
                                 </div>
                             </div>
                             <div class="pack-actions-bottom">
-                                <button class="pack-trial-btn">1Day 체험</button>
-                                <button class="pack-pin-btn">인증코드 입력</button>
+                                <button class="pack-trial-btn">Day 1 체험</button>
+                                <button class="pack-pin-btn">구매 인증코드 입력</button>
                             </div>
                         </div>
                     </div>
 
                     <!-- 어원 -->
                     <div class="word-pack-card">
-                        <div class="pack-thumbnail thumb-etymology">
-                            <img src="assets/etymology_voca_thumb.png" alt="능률VOCA 어원편 고등">
+                        <div class="package-thumbnail-area">
+                            <div class="diag-book" style="top: 17px; left: 12px;"><img
+                                    src="assets/etymology_voca_thumb.png" alt="능률VOCA 어원편 고등"></div>
                         </div>
                         <div class="word-pack-content">
                             <div class="word-pack-info">
                                 <div class="pack-title">능률VOCA 어원편 고등</div>
                                 <div class="price-group">
-                                    <div class="pack-price">12,900원</div>
+                                    <div class="pack-price">4,900원</div>
                                     <button class="pack-buy-btn">구매하기</button>
                                 </div>
                             </div>
                             <div class="pack-actions-bottom">
-                                <button class="pack-trial-btn">1Day 체험</button>
-                                <button class="pack-pin-btn">인증코드 입력</button>
+                                <button class="pack-trial-btn">Day 1 체험</button>
+                                <button class="pack-pin-btn">구매 인증코드 입력</button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 수능 -->
+                    <!-- 내신+수능 패키지 -->
                     <div class="word-pack-card">
-                        <div class="pack-thumbnail thumb-sat">
-                            <img src="assets/sat_voca_thumb.png" alt="능률VOCA 수능 필수">
+                        <div class="package-thumbnail-area">
+                            <div class="diag-book diag-1"><img src="assets/etymology_voca_thumb.png" alt="Book 1"></div>
+                            <div class="diag-book diag-2"><img src="assets/sat_voca_thumb.png" alt="Book 2"></div>
                         </div>
                         <div class="word-pack-content">
                             <div class="word-pack-info">
-                                <div class="pack-title">능률VOCA 수능 필수</div>
+                                <div class="pack-title">내신+수능대비 패키지</div>
                                 <div class="price-group">
-                                    <div class="pack-price">14,900원</div>
+                                    <div class="pack-price">8,900원</div>
                                     <button class="pack-buy-btn">구매하기</button>
                                 </div>
                             </div>
+                            <div class="pack-notice">※ 교재 인증 불가 (디지털 전용 상품)</div>
                             <div class="pack-actions-bottom">
-                                <button class="pack-trial-btn">1Day 체험</button>
-                                <button class="pack-pin-btn">인증코드 입력</button>
+                                <button class="pack-trial-btn">Day 1 체험</button>
                             </div>
                         </div>
                     </div>
@@ -1102,25 +1126,37 @@
                     <div class="profile-avatar">👤</div>
                     <div class="profile-info">
                         <h3 class="user-name">열공하는 학생님</h3>
-                        <p class="user-level">LV.15 암기 마스터</p>
                     </div>
                     <button class="edit-profile-btn">수정</button>
                 </div>
 
                 <!-- Detailed Streak UI -->
                 <div class="my-card streak-detail-card">
-                    <div class="card-header">
-                        <h4 class="card-title">학습 스트레이크</h4>
-                        <span class="total-streak">현재 15일 연속</span>
+                    <div class="streak-main-stats">
+                        <div class="streak-item highlight">
+                            <div class="streak-info">
+                                <span class="streak-value">7</span>
+                                <span class="streak-suffix">일</span>
+                            </div>
+                            <span class="streak-label">현재 연속 학습 중</span>
+                        </div>
+                        <div class="streak-divider"></div>
+                        <div class="streak-item">
+                            <div class="streak-info">
+                                <span class="streak-value">16</span>
+                                <span class="streak-suffix">일</span>
+                            </div>
+                            <span class="streak-label">총 학습 일수</span>
+                        </div>
                     </div>
-                    <div class="streak-calendar">
-                        <div class="day-dot active">월</div>
-                        <div class="day-dot active">화</div>
-                        <div class="day-dot active">수</div>
-                        <div class="day-dot active">목</div>
-                        <div class="day-dot active">금</div>
-                        <div class="day-dot active">토</div>
-                        <div class="day-dot today">일</div>
+                    <div class="streak-calendar-mini" id="openStreakCalendar">
+                        <div class="day-dot active"><span class="day-name">월</span></div>
+                        <div class="day-dot active"><span class="day-name">화</span></div>
+                        <div class="day-dot active today"><span class="day-name">수</span></div>
+                        <div class="day-dot"><span class="day-name">목</span></div>
+                        <div class="day-dot"><span class="day-name">금</span></div>
+                        <div class="day-dot"><span class="day-name">토</span></div>
+                        <div class="day-dot"><span class="day-name">일</span></div>
                     </div>
                 </div>
 
@@ -1196,28 +1232,28 @@
                 <!-- Settings List -->
                 <div class="my-section">
                     <div class="settings-list">
-                        <div class="settings-item">
+                        <div class="settings-item" id="openWordbookManageBtn">
                             <div class="settings-label">
                                 <span class="settings-icon">📚</span>
                                 <span>내 단어장 관리</span>
                             </div>
                             <span class="settings-arrow">›</span>
                         </div>
-                        <div class="settings-item">
+                        <div class="settings-item" id="openNotificationSettingsBtn">
                             <div class="settings-label">
                                 <span class="settings-icon">🔔</span>
                                 <span>학습 알림 설정</span>
                             </div>
                             <span class="settings-arrow">›</span>
                         </div>
-                        <div class="settings-item">
+                        <div class="settings-item" id="openDataResetBtn">
                             <div class="settings-label">
                                 <span class="settings-icon">📊</span>
                                 <span>데이터 초기화</span>
                             </div>
                             <span class="settings-arrow">›</span>
                         </div>
-                        <div class="settings-item">
+                        <div class="settings-item" id="openAccountSecurityBtn">
                             <div class="settings-label">
                                 <span class="settings-icon">🛡️</span>
                                 <span>계정 보안</span>
@@ -1242,8 +1278,285 @@
             </div>
         </div>
 
+        <!-- My Wordbook Management Mode -->
+        <div id="myWordbookManageMode" class="mode-section">
+            <div class="my-container">
+                <div class="my-mode-header">
+                    <button class="back-btn" id="backToMyFromManageBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                    </button>
+                    <h2 class="section-title">내 단어장 관리</h2>
+                </div>
+
+                <div class="manage-list-container">
+                    <div id="wordbookManageList" class="manage-list">
+                        <!-- Dynamic content here -->
+                    </div>
+                </div>
+
+                <button class="add-new-book-btn" id="addNewBookBtn">
+                    <span class="plus-icon">+</span> 새 단어장 만들기
+                </button>
+            </div>
+        </div>
+
+        <!-- Learning Notification Settings Mode -->
+        <div id="notificationSettingsMode" class="mode-section">
+            <div class="my-container">
+                <div class="my-mode-header">
+                    <button class="back-btn" id="backToMyFromNotificationBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                    </button>
+                    <h2 class="section-title">학습 알림 설정</h2>
+                </div>
+
+                <div class="settings-group">
+                    <div class="settings-group-title">공통 설정</div>
+                    <div class="settings-card">
+                        <div class="toggle-setting">
+                            <div class="setting-info">
+                                <div class="setting-title">푸시 알림 허용</div>
+                                <div class="setting-desc">학습 일정 및 혜택 정보를 받습니다.</div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="pushNotificationToggle" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-setting">
+                            <div class="setting-info">
+                                <div class="setting-title">야간 알림 제한</div>
+                                <div class="setting-desc">특정 시간대에는 알림을 받지 않습니다.</div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="nightNotificationToggle" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="time-range-setting" id="nightTimeRangeArea">
+                            <div class="time-input-group">
+                                <span class="time-label">시작</span>
+                                <input type="time" id="nightStartTime" class="custom-time-input" value="21:00">
+                            </div>
+                            <span class="time-separator">~</span>
+                            <div class="time-input-group">
+                                <span class="time-label">종료</span>
+                                <input type="time" id="nightEndTime" class="custom-time-input" value="08:00">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-group-title">맞춤형 암기 알림</div>
+                    <div class="settings-card">
+                        <div class="toggle-setting">
+                            <div class="setting-info">
+                                <div class="setting-title">오늘의 암기 알림</div>
+                                <div class="setting-desc">설정한 시간에 오늘의 단어 학습을 알려줍니다.</div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="dailyMemorizeToggle" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="time-setting">
+                            <div class="setting-label">알림 시간 설정</div>
+                            <input type="time" id="memorizeTimeInput" class="custom-time-input" value="19:00">
+                        </div>
+                    </div>
+
+                    <div class="settings-group-title">기타 알림</div>
+                    <div class="settings-card">
+                        <div class="toggle-setting">
+                            <div class="setting-info">
+                                <div class="setting-title">복습 권장 알림</div>
+                                <div class="setting-desc">오답이 많은 단어를 다시 공부하도록 알려줍니다.</div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="reviewRecommendationToggle" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-setting">
+                            <div class="setting-info">
+                                <div class="setting-title">주간 학습 리포트</div>
+                                <div class="setting-desc">매주 월요일 한 주간의 학습 통계를 보내줍니다.</div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="weeklyReportToggle" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="settings-footer-tip">💡 기기 자체의 설정에서 알림이 차단되어 있으면 푸시를 받을 수 없으니 주의해주세요.</p>
+            </div>
+        </div>
+
+        <!-- Account Security Mode -->
+        <div id="accountSecurityMode" class="mode-section">
+            <div class="my-container">
+                <div class="my-mode-header">
+                    <button class="back-btn" id="backToMyFromSecurityBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                    </button>
+                    <h2 class="section-title">계정 보안</h2>
+                </div>
+
+                <div class="settings-group">
+                    <div class="settings-group-title">내 계정 정보</div>
+                    <div class="settings-card">
+                        <div class="user-profile-summary" style="display: flex; align-items: center; gap: 1rem;">
+                            <div class="profile-avatar-small"
+                                style="font-size: 2rem; background: rgba(102, 126, 234, 0.1); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                👤</div>
+                            <div class="profile-details">
+                                <div class="user-email"
+                                    style="font-weight: 700; color: var(--text-primary); margin-bottom: 0.2rem;">
+                                    jwchoi@example.com</div>
+                                <div class="login-provider" style="font-size: 0.8rem; color: var(--text-secondary);">구글
+                                    계정으로 로그인됨</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-group-title">보안 설정</div>
+                    <div class="settings-card">
+                        <div class="action-setting" id="changePasswordBtn"
+                            style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 0.8rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+                            <div class="setting-info">
+                                <div class="setting-title" style="font-weight: 700; color: var(--text-primary);">비밀번호 변경
+                                </div>
+                                <div class="setting-desc" style="font-size: 0.8rem; color: var(--text-secondary);">6개월
+                                    전에 변경되었습니다.</div>
+                            </div>
+                            <span class="settings-arrow">›</span>
+                        </div>
+                        <div class="toggle-setting"
+                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0;">
+                            <div class="setting-info">
+                                <div class="setting-title" style="font-weight: 700; color: var(--text-primary);">2단계 인증
+                                </div>
+                                <div class="setting-desc" style="font-size: 0.8rem; color: var(--text-secondary);">기존 기기
+                                    외의 로그인을 차단합니다.</div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="twoFactorAuthToggle">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-group-title">접속 관리</div>
+                    <div class="settings-card">
+                        <div class="action-setting" id="manageSessionsBtn"
+                            style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 0.4rem 0;">
+                            <div class="setting-info">
+                                <div class="setting-title" style="font-weight: 700; color: var(--text-primary);">로그인 기기
+                                    관리</div>
+                                <div class="setting-desc" style="font-size: 0.8rem; color: var(--text-secondary);">현재
+                                    2개의 기기에서 사용 중입니다.</div>
+                            </div>
+                            <span class="settings-arrow">›</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="danger-zone" style="margin-top: 2rem; display: flex; flex-direction: column; gap: 0.8rem;">
+                    <button class="logout-btn" id="logoutBtn"
+                        style="width: 100%; padding: 1rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; color: var(--text-primary); font-weight: 700; cursor: pointer;">로그아웃</button>
+                    <button class="withdraw-btn" id="withdrawBtn"
+                        style="width: 100%; padding: 1rem; background: transparent; border: none; color: #f5576c; font-size: 0.85rem; cursor: pointer; text-decoration: underline;">회원
+                        탈퇴</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Reset Mode -->
+        <div id="dataResetMode" class="mode-section">
+            <div class="my-container">
+                <div class="my-mode-header">
+                    <button class="back-btn" id="backToMyFromResetBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                    </button>
+                    <h2 class="section-title">데이터 초기화</h2>
+                </div>
+
+                <div class="reset-warning-card"
+                    style="background: rgba(245, 87, 108, 0.1); border: 1px solid rgba(245, 87, 108, 0.3); border-radius: 20px; padding: 1.5rem; margin-bottom: 2rem; margin-top: 1.2rem;">
+                    <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem; color: #f5576c;">
+                        <span style="font-size: 1.5rem;">⚠️</span>
+                        <strong style="font-size: 1.1rem;">주의하세요!</strong>
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+                        데이터 초기화 시 복구가 불가능합니다. 신중하게 선택해주세요.
+                    </p>
+                </div>
+
+                <div class="settings-group">
+                    <div class="settings-group-title">항목별 초기화</div>
+                    <div class="settings-card">
+                        <div class="action-setting" id="resetWordbookBtn"
+                            style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 1rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+                            <div class="setting-info">
+                                <div class="setting-title" style="font-weight: 700; color: var(--text-primary);">내 단어장
+                                    초기화</div>
+                                <div class="setting-desc" style="font-size: 0.8rem; color: var(--text-secondary);">생성한
+                                    단어장과 저장된 단어를 모두 삭제합니다.</div>
+                            </div>
+                            <span style="color: #f5576c; font-size: 0.85rem; font-weight: 700;">초기화</span>
+                        </div>
+                        <div class="action-setting" id="resetProgressBtn"
+                            style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 1rem 0;">
+                            <div class="setting-info">
+                                <div class="setting-title" style="font-weight: 700; color: var(--text-primary);">학습 진도
+                                    초기화</div>
+                                <div class="setting-desc" style="font-size: 0.8rem; color: var(--text-secondary);">Day별
+                                    학습 완료 기록과 성취도를 초기화합니다.</div>
+                            </div>
+                            <span style="color: #f5576c; font-size: 0.85rem; font-weight: 700;">초기화</span>
+                        </div>
+                    </div>
+
+                    <div class="settings-group-title" style="color: #f5576c;">전체 초기화</div>
+                    <div class="settings-card" style="border-color: rgba(245, 87, 108, 0.3);">
+                        <div class="action-setting" id="resetAllDataBtn"
+                            style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 0.5rem 0;">
+                            <div class="setting-info">
+                                <div class="setting-title" style="font-weight: 700; color: #f5576c;">모든 데이터 초기화</div>
+                                <div class="setting-desc" style="font-size: 0.8rem; color: var(--text-secondary);">앱 내의
+                                    모든 학습 정보와 설정을 처음 상태로 되돌립니다.</div>
+                            </div>
+                            <span style="color: #f5576c; font-size: 0.85rem; font-weight: 700;">전체 초기화</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p
+                    style="font-size: 0.85rem; color: var(--text-secondary); text-align: center; margin-top: 2rem; padding: 0 1rem;">
+                    💡 초기화 후에는 앱이 자동으로 재시작될 수 있습니다.
+                </p>
+            </div>
+        </div>
 
         <!-- Purchase Verification Modal -->
+
         <div id="pinModal" class="modal-overlay hidden">
             <div class="modal-content">
                 <div class="modal-header">
@@ -1370,6 +1683,61 @@
             </button>
         </nav>
     </div>
+
+    <!-- Wordbook Selection Modal -->
+    <div id="wordbookSelectModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>단어장 추가</h3>
+                <button class="modal-close" id="closeWordbookSelectModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>이 단어를 추가할 단어장을 선택하세요.</p>
+                <div id="wordbookSelectList" class="manage-list">
+                    <!-- Dynamic content here -->
+                </div>
+                <div class="modal-notice">
+                    <span class="notice-icon">💡</span>
+                    새로운 단어장은 <strong>'My > 내 단어장 관리'</strong>에서 만들 수 있습니다.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Streak Calendar Modal -->
+    <div id="streakCalendarModal" class="modal-overlay hidden">
+        <div class="modal-content calendar-modal-content">
+            <div class="modal-header">
+                <div class="calendar-header-title">
+                    <button id="prevMonth" class="month-nav-btn">‹</button>
+                    <h3 id="calendarMonthTitle">2026년 3월</h3>
+                    <button id="nextMonth" class="month-nav-btn">›</button>
+                </div>
+                <button class="modal-close" id="closeStreakCalendarModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="calendar-weekdays">
+                    <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+                </div>
+                <div id="calendarGrid" class="calendar-grid">
+                    <!-- Dynamic calendar grid -->
+                </div>
+                <div class="calendar-summary">
+                    <div class="summary-item">
+                        <span class="dot highlight"></span>
+                        <span>연속 12일</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="dot active"></span>
+                        <span>학습 완료</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden"></div>
 
     <script src="script.js"></script>
 </body>
