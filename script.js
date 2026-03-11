@@ -62,6 +62,129 @@ const vocabulary = [
     }
 ];
 
+// 중등 기본 단어팩: CSV 기반 데이터 (Day별 단어 리스트)
+let currentVocabulary = vocabulary;  // 암기/퀴즈에서 사용할 현재 단어 목록
+let middleBasicByDay = null;         // { 1: [...], 2: [...], ... } CSV 파싱 결과 캐시
+
+// Day 01 임베디드 데이터 (fetch 실패 시 file:// 등에서 사용)
+const MIDDLE_BASIC_DAY01 = [
+    { english: "tall", korean: "키가 큰 / 높은", example: "My brother is very tall.", exampleKorean: "내 남동생은 키가 매우 크다.", example2: "a tall building", exampleKorean2: "높은 건물" },
+    { english: "cut", korean: "(cut-cut) 1. 베다 / 자르다", example: "I cut my finger.", exampleKorean: "나는 손가락을 베었다.", example2: "She cuts the cake.", exampleKorean2: "그녀는 그 케이크를 자른다." },
+    { english: "have", korean: "(had-had) 1. 가지다 / 먹다, 마시다", example: "We have over one hundred languages.", exampleKorean: "교과서 우리는 100개가 넘는 언어를 가지고 있다.", example2: "He didn't have breakfast.", exampleKorean2: "그는 아침을 먹지 않았다." },
+    { english: "meet", korean: "(met-met) 만나다", example: "Let's meet at three o'clock.", exampleKorean: "3시에 만나자." },
+    { english: "see", korean: "(saw-seen) 1. 보다 / 알다, 이해하다", example: "I didn't see the car.", exampleKorean: "나는 그 차를 보지 못했다.", example2: "\"This book is mine.\" \"Oh, I see.\"", exampleKorean2: "\"이 책은 내 것이야.\" \"아, 알았어.\"" },
+    { english: "from", korean: "[장소] …에서(부터) / [시각] …부터", example: "Let's walk from here.", exampleKorean: "여기에서부터 걸어가자.", example2: "The shop is open from 8 a.m. to 6 p.m.", exampleKorean2: "그 가게는 오전 8시부터 오후 6시까지 문을 연다." },
+    { english: "what", korean: "무엇 / 어떤 것  형 무슨", example: "What did you find there?", exampleKorean: "교과서 너는 거기서 무엇을 찾았니?", example2: "What color do you like?", exampleKorean2: "너는 어떤 색을 좋아하니?" },
+    { english: "actor", korean: "배우", example: "He is a movie actor.", exampleKorean: "그는 영화 배우이다.", example2: "actress", exampleKorean2: "명 여배우" },
+    { english: "make", korean: "(made-made) 만들다", example: "I will make cookies.", exampleKorean: "나는 쿠키를 만들 것이다.", example2: "She made me a bag.", exampleKorean2: "그녀가 내게 가방을 만들어주었다." },
+    { english: "friend", korean: "친구 / 벗", example: "I play soccer with my friends.", exampleKorean: "교과서 나는 친구들과 축구를 한다.", example2: "a best friend", exampleKorean2: "단짝" },
+    { english: "large", korean: "큰, 넓은 small / 많은", example: "This room is very large.", exampleKorean: "이 방은 매우 크다.", example2: "a large family", exampleKorean2: "대가족 (식구가 많은 가족)" },
+    { english: "heavy", korean: "무거운 light 0021 / (양·정도가) 많은, 심한", example: "This box is very heavy.", exampleKorean: "이 상자는 매우 무겁다.", example2: "heavy rain", exampleKorean2: "폭우" },
+    { english: "school", korean: "학교", example: "I had a test at school.", exampleKorean: "나는 학교에서 시험을 봤다.", example2: "school", exampleKorean2: "은 그리스어에서 나온 말로 본래 ‘여가 시간', ‘휴식'이라는 의미를 가집니다." },
+    { english: "room", korean: "방", example: "This house has three rooms.", exampleKorean: "이 집에는 방이 3개 있다." },
+    { english: "dance", korean: "춤추다  명 춤 / 댄스", example: "Shall we dance?", exampleKorean: "춤추실래요?", example2: "folk dance", exampleKorean2: "민속 무용" },
+    { english: "clean", korean: "깨끗한 dirty 0042  동 청소하다", example: "My hands are not clean.", exampleKorean: "내 손은 깨끗하지 않다.", example2: "He cleaned his room.", exampleKorean2: "그는 자신의 방을 청소했다." },
+    { english: "bean", korean: "콩", example: "I had beans and rice for lunch.", exampleKorean: "교과서 나는 점심으로 콩과 밥을 먹었다.", example2: "coffee beans", exampleKorean2: "커피 콩" },
+    { english: "soap", korean: "비누", example: "Wash your hands with soap.", exampleKorean: "비누로 너의 손을 씻어라." },
+    { english: "come[be] from", korean: "… 출신이다 / …에서 오다", example: "He comes from Canada.", exampleKorean: "그는 캐나다 출신이다.", example2: "She is from India.", exampleKorean2: "교과서 그녀는 인도에서 왔다." },
+    { english: "be going to-v", korean: "…할 것이다 / …할 예정이다", example: "We are going to go to the zoo.", exampleKorean: "우리는 그 동물원에 갈 것이다." }
+];
+
+const MIDDLE_BASIC_DAY02 = [
+    { english: "light", korean: "빛 / (전깃)불, 전등  형 가벼운", example: "Plants need water and light.", exampleKorean: "식물은 물과 빛을 필요로 한다.", example2: "The guide turned off the lights in the cave.", exampleKorean2: "교과서 가이드는 동굴에 있는 불들을 껐다." },
+    { english: "for", korean: "[목적] …을 위해 / [시간] … 동안", example: "We went home for dinner.", exampleKorean: "우리는 저녁 식사를 하러 집에 갔다.", example2: "I studied for three hours.", exampleKorean2: "나는 3시간 동안 공부했다." },
+    { english: "eat", korean: "(ate-eaten) 먹다", example: "I eat an apple every day.", exampleKorean: "나는 매일 사과 한 개를 먹는다." },
+    { english: "too", korean: "너무 / 또한, 게다가", example: "It's too hot today.", exampleKorean: "오늘은 너무 덥다.", example2: "I think so too.", exampleKorean2: "나 또한 그렇게 생각해." },
+    { english: "lunch", korean: "점심 (식사)", example: "We have lunch at noon.", exampleKorean: "우리는 정오에 점심을 먹는다.", example2: "0064 breakfast", exampleKorean2: "명 아침 (식사)" },
+    { english: "wait", korean: "기다리다 ((for))", example: "Please wait here.", exampleKorean: "여기에서 기다려주세요.", example2: "They are waiting for you.", exampleKorean2: "그들은 너를 기다리고 있다." },
+    { english: "student", korean: "학생", example: "I'm a middle school student.", exampleKorean: "나는 중학생이다." },
+    { english: "model", korean: "모형 / 모델", example: "The boy is making a model of a plane.", exampleKorean: "그 소년이 모형 비행기를 만들고 있다.", example2: "a fashion model", exampleKorean2: "패션모델" },
+    { english: "young", korean: "어린 / 젋은", example: "He was a young man with long brown hair.", exampleKorean: "교과서 그는 긴 갈색 머리를 가진 젊은 남자였다.", example2: "young people", exampleKorean2: "젊은이들" },
+    { english: "city", korean: "도시", example: "New York is a big city.", exampleKorean: "뉴욕은 대도시이다." },
+    { english: "watch", korean: "보다  명 손목시계", example: "We watched a soccer match.", exampleKorean: "교과서 우리는 축구 경기를 봤다.", example2: "He is looking at his watch.", exampleKorean2: "그는 손목시계를 보고 있다." },
+    { english: "hobby", korean: "취미", example: "I play the violin as a hobby.", exampleKorean: "나는 취미로 바이올린을 연주한다." },
+    { english: "ago", korean: "… 전에 / 이전에", example: "We were in the same class twenty years ago.", exampleKorean: "교과서 우리는 20년 전에 같은 반이었다.", example2: "long ago", exampleKorean2: "옛날에, 오래전에" },
+    { english: "classmate", korean: "급우 / 반 친구", example: "All of his classmates are nice.", exampleKorean: "그의 반 친구들은 모두 착하다." },
+    { english: "dancer", korean: "춤추는 사람 / 무용수", example: "She is a ballet dancer.", exampleKorean: "그녀는 발레 무용수이다.", example2: "0015 dance", exampleKorean2: "동 춤추다; 명 춤, 댄스" },
+    { english: "dirt", korean: "먼지, 때 / 흙", example: "Brush the dirt off your clothes.", exampleKorean: "너의 옷에 붙은 먼지를 털어내라.", example2: "The kids were playing with dirt.", exampleKorean2: "아이들은 흙을 가지고 놀고 있었다." },
+    { english: "body", korean: "몸 / 신체", example: "Tomatoes are good for your body.", exampleKorean: "토마토는 너의 몸에 좋다." },
+    { english: "classroom", korean: "교실 / 강의실", example: "Did they clean the classroom?", exampleKorean: "그들은 교실을 청소했니?" },
+    { english: "go to school", korean: "학교에 다니다", example: "I went to school for six years.", exampleKorean: "나는 6년 동안 학교에 다녔다." },
+    { english: "make friends", korean: "친구가 되다 / 친해지다", example: "I made friends with them.", exampleKorean: "나는 그들과 친구가 되었다.", example2: "IDIOMS & PHRASES", exampleKorean2: "영단어 우리말 뜻 영단어 우리말 뜻 잘 외워지지 않는 영단어를 아래 빈칸에 다시 써 봅시다." }
+];
+
+/**
+ * CSV 한 행 파싱 (쌍따옴표 필드 처리)
+ */
+function parseCSVLine(line) {
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+        const c = line[i];
+        if (c === '"') {
+            if (inQuotes && line[i + 1] === '"') {
+                current += '"';
+                i++;
+            } else {
+                inQuotes = !inQuotes;
+            }
+        } else if ((c === ',' && !inQuotes) || (c === '\r' && !inQuotes)) {
+            result.push(current.trim());
+            current = '';
+        } else if (c !== '\r') {
+            current += c;
+        }
+    }
+    result.push(current.trim());
+    return result;
+}
+
+/**
+ * 중등 기본 단어팩 CSV 로드 및 Day별로 그룹화
+ */
+async function loadMiddleBasicCSV() {
+    if (middleBasicByDay !== null) return middleBasicByDay;
+    try {
+        const res = await fetch('middle_basic_voca_day01_50.csv');
+        let text = await res.text();
+        text = text.replace(/^\uFEFF/, ''); // BOM 제거
+        const lines = text.split('\n').filter(l => l.trim());
+        if (lines.length < 2) throw new Error('CSV 비어있음');
+        const byDay = {};
+        for (let i = 1; i < lines.length; i++) {
+            const cols = parseCSVLine(lines[i]);
+            if (cols.length < 6) continue;
+            const dayLabel = (cols[0] || '').trim();  // "Day 01", "Day 02" ...
+            const dayNum = parseInt(dayLabel.replace(/\D/g, ''), 10) || 1;
+            const word = (cols[1] || '').trim();
+            const meaning1 = (cols[2] || '').trim();
+            const meaning2 = (cols[3] || '').trim();
+            let example = (cols[4] || '').trim();
+            let exampleKorean = (cols[5] || '').trim();
+            let example2 = (cols[6] || '').trim();
+            let exampleKorean2 = (cols[7] || '').trim();
+            const korean = meaning2 ? `${meaning1} / ${meaning2}` : meaning1;
+            if (!word) continue;
+            if (!byDay[dayNum]) byDay[dayNum] = [];
+            byDay[dayNum].push({
+                english: word,
+                korean: korean,
+                example: example || '-',
+                exampleKorean: exampleKorean || '-',
+                example2: example2 || '',
+                exampleKorean2: exampleKorean2 || ''
+            });
+        }
+        middleBasicByDay = byDay;
+        return byDay;
+    } catch (err) {
+        console.warn('중등 기본 CSV 로드 실패, 임베디드 데이터 사용:', err.message);
+        middleBasicByDay = { 1: MIDDLE_BASIC_DAY01, 2: MIDDLE_BASIC_DAY02 };
+        return middleBasicByDay;
+    }
+}
+
 // ===== 암기모드 관련 변수 및 로직 =====
 let currentIndex = 0;
 let studiedWords = new Set();
@@ -82,7 +205,9 @@ const nextBtn = document.getElementById('nextBtn');
 
 // 카드 업데이트 함수
 function updateCard() {
-    const word = vocabulary[currentIndex];
+    const list = currentVocabulary;
+    if (!list || !list.length) return;
+    const word = list[currentIndex];
 
     // 카드 뒤집기 리셋
     if (isFlipped) {
@@ -102,12 +227,28 @@ function updateCard() {
         svg.setAttribute('fill', 'none');
         svg.setAttribute('stroke', 'currentColor');
 
-        // 예문에서 단어 강조 표시
-        const regex = new RegExp(`\\b(${word.english})\\b`, 'gi');
-        const highlightedExample = word.example.replace(regex, '<span class="highlight-word">$1</span>');
+        // 예문에서 단어 강조 표시 (특수문자 이스케이프)
+        const escaped = (word.english || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`\\b(${escaped})\\b`, 'gi');
+        const highlightedExample = (word.example || '-').replace(regex, '<span class="highlight-word">$1</span>');
         example.innerHTML = highlightedExample;
 
-        exampleTranslation.textContent = word.exampleKorean;
+        exampleTranslation.textContent = word.exampleKorean || '-';
+
+        const exampleItem2 = document.getElementById('exampleItem2');
+        const example2DOM = document.getElementById('example2');
+        const exampleTranslation2DOM = document.getElementById('exampleTranslation2');
+
+        if (exampleItem2 && example2DOM && exampleTranslation2DOM) {
+            if (word.example2 && word.example2.trim() !== '') {
+                const highlightedExample2 = word.example2.replace(regex, '<span class="highlight-word">$1</span>');
+                example2DOM.innerHTML = highlightedExample2;
+                exampleTranslation2DOM.textContent = word.exampleKorean2 || '-';
+                exampleItem2.style.display = 'block';
+            } else {
+                exampleItem2.style.display = 'none';
+            }
+        }
 
         // 자동 소리 재생 (진입 시)
         const memorizeAutoplay = document.getElementById('memorizeAutoplayToggle');
@@ -118,7 +259,12 @@ function updateCard() {
 
     // 진행 상태 업데이트
     currentCard.textContent = currentIndex + 1;
-    const progress = ((currentIndex + 1) / vocabulary.length) * 100;
+    const totalCardsEl = document.getElementById('totalCards');
+    if (totalCardsEl) totalCardsEl.textContent = list.length;
+    const totalWordsCount = document.getElementById('totalWordsCount');
+    if (totalWordsCount) totalWordsCount.textContent = list.length;
+
+    const progress = ((currentIndex + 1) / list.length) * 100;
     progressFill.style.width = `${progress}%`;
 
     // 학습한 단어 추가
@@ -127,7 +273,7 @@ function updateCard() {
 
     // 버튼 상태 업데이트
     prevBtn.disabled = currentIndex === 0;
-    nextBtn.disabled = currentIndex === vocabulary.length - 1;
+    nextBtn.disabled = currentIndex === list.length - 1;
 }
 
 // 카드 뒤집기
@@ -146,7 +292,7 @@ prevBtn.addEventListener('click', () => {
 
 // 다음 버튼
 nextBtn.addEventListener('click', () => {
-    if (currentIndex < vocabulary.length - 1) {
+    if (currentVocabulary && currentIndex < currentVocabulary.length - 1) {
         currentIndex++;
         updateCard();
     }
@@ -934,7 +1080,7 @@ favoriteBtn.addEventListener('click', (e) => {
     e.stopPropagation(); // 카드 뒤집기 방지
 
     // 현재 암기 중인 단어 정보 가져오기
-    const word = vocabulary[currentIndex];
+    const word = currentVocabulary && currentVocabulary[currentIndex] ? currentVocabulary[currentIndex] : vocabulary[currentIndex];
     if (word) {
         openWordbookSelector(word.english, word.korean);
     }
@@ -996,9 +1142,10 @@ function showPackSelection() {
     memorizeSelection.classList.remove('hidden');
     daySelection.classList.add('hidden');
     memorizeContent.classList.add('hidden');
+    currentVocabulary = vocabulary;
 }
 
-function showDaySelection(packName, packTitleText) {
+async function showDaySelection(packName, packTitleText) {
     currentPack = packName;
     currentPackTitle = packTitleText;
     selectedPackTitle.textContent = packTitleText;
@@ -1007,7 +1154,9 @@ function showDaySelection(packName, packTitleText) {
     daySelection.classList.remove('hidden');
     memorizeContent.classList.add('hidden');
 
-    // Day 그리드 생성
+    if (packName === 'middle_basic') {
+        await loadMiddleBasicCSV();
+    }
     generateDayGrid();
 }
 
@@ -1015,8 +1164,12 @@ function generateDayGrid() {
     dayGrid.innerHTML = '';
 
     const isTrialPack = currentPack === 'etymology';
+    const isMiddleBasic = currentPack === 'middle_basic';
+    const totalDays = isMiddleBasic && middleBasicByDay
+        ? Math.max(...Object.keys(middleBasicByDay).map(Number), 0) || 50
+        : 30;
 
-    for (let i = 1; i <= 30; i++) {
+    for (let i = 1; i <= totalDays; i++) {
         const dayCard = document.createElement('div');
         dayCard.className = 'day-card';
 
@@ -1025,22 +1178,27 @@ function generateDayGrid() {
             dayCard.classList.add('locked');
         }
 
-        // 고정 데이터 (나중에 DB 연동 시 변경)
         let completedCount;
-        if (i < 5) completedCount = 30;
-        else if (i < 15) completedCount = 25 - (i % 5);
-        else if (i < 25) completedCount = 15 - (i % 6);
-        else completedCount = 5 - (i % 3);
+        let dayWordCount = 30;
+        if (isMiddleBasic && middleBasicByDay && middleBasicByDay[i]) {
+            dayWordCount = middleBasicByDay[i].length;
+            completedCount = Math.min(Math.floor((i / totalDays) * dayWordCount), dayWordCount);
+        } else {
+            if (i < 5) completedCount = 30;
+            else if (i < 15) completedCount = 25 - (i % 5);
+            else if (i < 25) completedCount = 15 - (i % 6);
+            else completedCount = 5 - (i % 3);
+        }
 
-        const isCompleted = completedCount === 30;
-        if (isCompleted && !isLocked) dayCard.classList.add('completed');
+        const isCompleted = !isLocked && completedCount === dayWordCount;
+        if (isCompleted) dayCard.classList.add('completed');
 
-        const percentage = (completedCount / 30) * 100;
+        const percentage = (isLocked ? 0 : (completedCount / dayWordCount)) * 100;
 
         dayCard.innerHTML = `
             ${isLocked ? '<span class="lock-icon">🔒</span>' : (isCompleted ? '<span class="day-badge">🏅</span>' : '')}
-            <div class="day-number">Day ${i}</div>
-            <div class="day-stats">${isLocked ? '잠김' : completedCount + '/30'}</div>
+            <div class="day-number">Day ${String(i).padStart(2, '0')}</div>
+            <div class="day-stats">${isLocked ? '잠김' : completedCount + '/' + dayWordCount}</div>
             <div class="day-progress-container">
                 <div class="day-progress-fill" style="width: ${isLocked ? 0 : percentage}%;"></div>
             </div>
@@ -1063,14 +1221,20 @@ function startMemorize(dayNum, source = 'pack') {
     daySelection.classList.add('hidden');
     memorizeContent.classList.remove('hidden');
 
-    // 상단 타이틀 업데이트
     if (source === 'pack') {
         const packTitleText = document.getElementById('selectedPackTitle').textContent;
         document.getElementById('memorizePackTitle').textContent = packTitleText;
+        if (currentPack === 'middle_basic' && middleBasicByDay && middleBasicByDay[dayNum]) {
+            currentVocabulary = middleBasicByDay[dayNum];
+        } else {
+            currentVocabulary = vocabulary;
+        }
         console.log(`${currentPack} - Day ${dayNum} 학습 시작`);
+    } else {
+        currentVocabulary = vocabulary;
     }
 
-    // 선택된 Day 정보로 초기화
+    studiedWords.clear();
     currentIndex = 0;
     updateCard();
 }
@@ -1086,6 +1250,7 @@ function startVocabMemorize(bookName) {
 
     document.getElementById('memorizePackTitle').textContent = bookName;
 
+    currentVocabulary = vocabulary;
     currentIndex = 0;
     updateCard();
 }
@@ -1108,6 +1273,7 @@ backToDaySelectionBtn.addEventListener('click', () => {
         daySelection.classList.remove('hidden');
         memorizeContent.classList.add('hidden');
     }
+    currentVocabulary = vocabulary;
 });
 
 // ===== PIN 인증 모달 로직 =====
@@ -1241,7 +1407,17 @@ document.getElementById('wordToMeaningAutoplayToggle').addEventListener('change'
 
 // 퀴즈 선택 화면 표시
 function showQuizSelection(keepExpanded = false) {
-    document.getElementById('studyCurrentPackName').textContent = currentPackTitle;
+    document.getElementById('studyCurrentPackName').textContent = currentPackTitle || "능률VOCA 어원편 고등";
+
+    // 선택된 패키지 하이라이트 표시 업데이트
+    document.querySelectorAll('.pack-select-btn').forEach(btn => {
+        if (btn.dataset.pack === currentPack) {
+            btn.classList.add('selected');
+        } else {
+            btn.classList.remove('selected');
+        }
+    });
+
     document.getElementById('quizSelection').style.display = 'block';
     document.getElementById('studyPackSelection').classList.add('hidden');
     document.getElementById('spellingQuiz').classList.add('hidden');
@@ -1270,9 +1446,11 @@ function showStudyPackSelection() {
 
     // 보유한 단어팩 리스트 (암기 탭의 데이터와 동일하게 구성)
     const packs = [
+        { id: 'middle_basic', title: '능률VOCA 중등 기본', thumb: 'assets/middle_basic_voca_thumb.png', progress: '11 / 40 Day' },
         { id: 'middle', title: '능률VOCA 어원편 중등', thumb: 'assets/middle_voca_thumb.png', progress: '15 / 60 Day' },
         { id: 'etymology', title: '능률VOCA 어원편 고등', thumb: 'assets/etymology_voca_thumb.png', progress: '40 / 80 Day' },
-        { id: 'sat', title: '능률VOCA 수능 필수', thumb: 'assets/sat_voca_thumb.png', progress: '5 / 100 Day' }
+        { id: 'sat', title: '능률VOCA 수능 필수', thumb: 'assets/sat_voca_thumb.png', progress: '5 / 100 Day' },
+        { id: 'package_sat', title: '내신+수능대비 패키지', thumb: 'assets/sat_voca_thumb.png', progress: '0 / 180 Day' }
     ];
 
     packs.forEach(pack => {
@@ -1299,8 +1477,22 @@ function showStudyPackSelection() {
     });
 }
 
-// 학습 탭 내 이벤트 리스너 추가
-document.getElementById('changeStudyPackBtn').addEventListener('click', showStudyPackSelection);
+// 학습 탭 내 이벤트 리스너 추가 (단어팩 아코디언 메뉴 클릭)
+document.querySelectorAll('.pack-select-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        currentPack = btn.dataset.pack;
+        currentPackTitle = btn.querySelector('.sub-title').textContent;
+        document.getElementById('studyCurrentPackName').textContent = currentPackTitle;
+
+        // 선택된 상태 UI 업데이트
+        document.querySelectorAll('.pack-select-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+
+        // 카드 닫기
+        document.getElementById('currentPackCard').classList.remove('expanded');
+    });
+});
 document.getElementById('backToQuizFromPackBtn').addEventListener('click', () => {
     showQuizSelection();
 });
@@ -1308,6 +1500,7 @@ document.getElementById('backToQuizFromPackBtn').addEventListener('click', () =>
 // 스펠링 퀴즈 토글
 // 퀴즈 카드 토글 설정
 const quizCards = [
+    { toggleId: 'currentPackToggle', cardId: 'currentPackCard' },
     { toggleId: 'spellingQuizToggle', cardId: 'spellingQuizCard' },
     { toggleId: 'wordMeaningQuizToggle', cardId: 'wordMeaningQuizCard' },
     { toggleId: 'sentenceQuizToggle', cardId: 'sentenceQuizCard' }
@@ -1919,10 +2112,10 @@ function loadSentenceQuestion() {
 
     aiSpeakingBtn.onclick = (e) => {
         e.stopPropagation();
-        const speakingResultModal = document.getElementById('speakingResultModal');
-        if (speakingResultModal) {
-            speakingResultModal.classList.remove('hidden');
-        }
+        const state = sentenceQuizStates[quizIndex];
+        const currentSentence = state ? state.originalWords.join(' ') : "";
+        const currentTranslation = vocabulary[quizIndex] ? vocabulary[quizIndex].exampleKorean : "";
+        startAiSpeaking(currentSentence, currentTranslation);
     };
 
     checkBtn.onclick = () => {
@@ -2154,6 +2347,234 @@ document.getElementById('backFromWordToMeaning').addEventListener('click', () =>
         document.getElementById('vocabularyDetailMode').classList.add('active');
     } else {
         showQuizSelection(true);
+    }
+});
+
+// ===== AI Speaking Logic =====
+let speakingTimerInterval = null;
+let speakingStartTime = 0;
+let isRecording = false;
+
+function startAiSpeaking(sentence, translation) {
+    if (isRecording) stopRecording();
+    deactivateAll();
+
+    // 부모 섹션인 studyMode 활성화 및 기본 선택창 숨김
+    studyMode.classList.add('active');
+    const quizSelection = document.getElementById('quizSelection');
+    if (quizSelection) {
+        quizSelection.classList.add('hidden');
+        quizSelection.style.display = 'none';
+    }
+
+    const speakingMode = document.getElementById('aiSpeakingMode');
+    if (speakingMode) {
+        speakingMode.classList.remove('hidden');
+        speakingMode.classList.add('active');
+        speakingMode.style.display = 'flex';
+    }
+
+    document.getElementById('speakingTargetSentence').textContent = sentence;
+    document.getElementById('speakingTargetTranslation').textContent = translation;
+
+    // UI 초기화
+    resetSpeakingUI();
+
+    // 이벤트 리스너 설정
+    const listenBtn = document.getElementById('speakingListenBtn');
+    listenBtn.onclick = () => speakWord(sentence);
+
+    const backBtn = document.getElementById('backFromAiSpeaking');
+    backBtn.onclick = () => {
+        stopRecording();
+        deactivateAll();
+        studyMode.classList.add('active');
+        document.getElementById('quizSelection').style.display = 'none';
+        document.getElementById('sentenceQuiz').classList.remove('hidden');
+    };
+
+    const mainRecordBtn = document.getElementById('mainRecordBtn');
+    mainRecordBtn.onclick = toggleRecording;
+
+    const retryBtn = document.getElementById('retryRecordBtn');
+    retryBtn.onclick = () => {
+        resetSpeakingUI();
+    };
+
+    const analyzeBtn = document.getElementById('startAnalyzeBtn');
+    analyzeBtn.onclick = () => {
+        showSpeakingFeedback();
+    };
+}
+
+function resetSpeakingUI() {
+    isRecording = false;
+    const mainRecordBtn = document.getElementById('mainRecordBtn');
+    const mainArea = document.querySelector('.record-main-area');
+    const visualizer = document.getElementById('speakingVisualizer');
+    const helpText = document.getElementById('recordHelpText');
+    const timer = document.getElementById('speakingTimer');
+    const actions = document.getElementById('postRecordActions');
+
+    mainRecordBtn.classList.remove('recording');
+    if (mainArea) mainArea.classList.remove('hidden');
+    visualizer.classList.remove('active');
+    helpText.classList.remove('hidden');
+    helpText.textContent = "버튼을 눌러 녹음 시작";
+    timer.textContent = "00:00";
+
+    if (actions) actions.classList.add('hidden');
+
+    if (speakingTimerInterval) {
+        clearInterval(speakingTimerInterval);
+        speakingTimerInterval = null;
+    }
+}
+
+function toggleRecording() {
+    if (!isRecording) {
+        startRecording();
+    } else {
+        stopRecording(true); // true means show actions
+    }
+}
+
+function startRecording() {
+    isRecording = true;
+    const mainRecordBtn = document.getElementById('mainRecordBtn');
+    const visualizer = document.getElementById('speakingVisualizer');
+    const helpText = document.getElementById('recordHelpText');
+
+    mainRecordBtn.classList.add('recording');
+    visualizer.classList.add('active');
+    helpText.textContent = "녹음 중... 다시 눌러 완료";
+
+    speakingStartTime = Date.now();
+    updateSpeakingTimer();
+    speakingTimerInterval = setInterval(updateSpeakingTimer, 1000);
+
+    // 실제 MediaRecorder를 사용하려면 권한 요청 등이 필요하지만, 
+    // 여기서는 UI 피드백 위주로 구현
+}
+
+function stopRecording(showActions = false) {
+    isRecording = false;
+    const mainRecordBtn = document.getElementById('mainRecordBtn');
+    const mainArea = document.querySelector('.record-main-area');
+    const visualizer = document.getElementById('speakingVisualizer');
+    const helpText = document.getElementById('recordHelpText');
+    const actions = document.getElementById('postRecordActions');
+
+    mainRecordBtn.classList.remove('recording');
+    visualizer.classList.remove('active');
+
+    if (showActions) {
+        if (mainArea) mainArea.classList.add('hidden');
+        if (helpText) helpText.classList.add('hidden');
+        if (actions) actions.classList.remove('hidden');
+    }
+
+    if (speakingTimerInterval) {
+        clearInterval(speakingTimerInterval);
+        speakingTimerInterval = null;
+    }
+}
+
+function updateSpeakingTimer() {
+    const elapsed = Math.floor((Date.now() - speakingStartTime) / 1000);
+    const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
+    const secs = String(elapsed % 60).padStart(2, '0');
+    document.getElementById('speakingTimer').textContent = `${mins}:${secs}`;
+
+    // 30초 넘으면 자동 중단
+    if (elapsed >= 30) {
+        toggleRecording();
+    }
+}
+
+function showSpeakingFeedback() {
+    showToast("녹음을 완료했습니다. AI가 분석 중입니다...");
+
+    // 로딩 시뮬레이션
+    setTimeout(() => {
+        const speakingResultModal = document.getElementById('speakingResultModal');
+        if (speakingResultModal) {
+            // 결과 데이터 시뮬레이션
+            const scores = {
+                accuracy: 85 + Math.floor(Math.random() * 10),
+                fluency: 75 + Math.floor(Math.random() * 15),
+                pronunciation: 80 + Math.floor(Math.random() * 10)
+            };
+            const totalScore = Math.floor((scores.accuracy + scores.fluency + scores.pronunciation) / 3);
+
+            // 모달 UI 업데이트
+            document.querySelector('.speaking-result-content .score-value').textContent = totalScore;
+
+            document.getElementById('accuracyBar').style.width = scores.accuracy + '%';
+            document.getElementById('fluencyBar').style.width = scores.fluency + '%';
+            document.getElementById('pronunciationBar').style.width = scores.pronunciation + '%';
+
+            document.getElementById('accuracyVal').textContent = scores.accuracy;
+            document.getElementById('fluencyVal').textContent = scores.fluency;
+            document.getElementById('pronunciationVal').textContent = scores.pronunciation;
+
+            // 단어별 피드백 생성
+            const sentence = document.getElementById('speakingTargetSentence').textContent;
+            const wordsMatch = sentence.match(/\b[\w']+\b|[.,!?;]/g);
+            const feedbackList = document.getElementById('speakingWordFeedbackList');
+            if (feedbackList) {
+                feedbackList.innerHTML = '';
+                wordsMatch.forEach((w, i) => {
+                    const fb = document.createElement('span');
+                    fb.className = 'word-fb';
+                    const rand = Math.random();
+                    if (rand > 0.9) fb.classList.add('error');
+                    else if (rand > 0.8) fb.classList.add('warning');
+                    else fb.classList.add('correct');
+                    fb.textContent = w;
+                    feedbackList.appendChild(fb);
+                });
+            }
+
+            // 평가 텍스트
+            const evaluation = document.querySelector('.result-evaluation');
+            if (evaluation) {
+                if (totalScore >= 92) evaluation.textContent = "완벽한 발음이에요! 원어민 수준입니다.";
+                else if (totalScore >= 85) evaluation.textContent = "훌륭합니다! 조금만 더 유창하게 말해보세요.";
+                else evaluation.textContent = "좋은 시도입니다. 억양에 좀 더 신경 써보세요.";
+            }
+
+            const tip = document.getElementById('speakingFeedbackTip');
+            if (tip) {
+                const errorWords = Array.from(feedbackList.querySelectorAll('.word-fb.error, .word-fb.warning'));
+                if (errorWords.length > 0) {
+                    tip.textContent = `💡 '${errorWords[0].textContent}'의 발음에 주의하여 다시 시도해보세요.`;
+                } else {
+                    tip.textContent = "💡 정말 훌륭한 발음입니다! 계속 연습해보세요.";
+                }
+            }
+
+            speakingResultModal.classList.remove('hidden');
+        }
+    }, 2000);
+}
+
+// 결과 모달 버튼 핸들러
+document.querySelector('.retry-speaking-btn').onclick = () => {
+    document.getElementById('speakingResultModal').classList.add('hidden');
+    resetSpeakingUI();
+};
+
+document.querySelector('.finish-speaking-btn').onclick = () => {
+    document.getElementById('speakingResultModal').classList.add('hidden');
+    const backBtn = document.getElementById('backFromAiSpeaking');
+    backBtn.click(); // 다시 센텐스 퀴즈로
+};
+
+// 모달 외부 클릭 닫기 (Speaking Result Modal)
+document.getElementById('speakingResultModal').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('speakingResultModal')) {
+        document.getElementById('speakingResultModal').classList.add('hidden');
     }
 });
 

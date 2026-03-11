@@ -340,6 +340,34 @@
             <div id="memorizeSelection" class="quiz-selection">
                 <h2 class="section-title">학습한 단어팩을 선택하세요</h2>
                 <div class="word-pack-container">
+                    <!-- 중등 기본 (최상단) -->
+                    <div class="word-pack-card memorize-pack-btn" data-pack="middle_basic">
+                        <div class="package-thumbnail-area">
+                            <div class="diag-book" style="top: 17px; left: 12px;"><img
+                                    src="assets/middle_basic_voca_thumb.png" alt="능률VOCA 중등 기본"></div>
+                        </div>
+                        <div class="word-pack-content">
+                            <div class="pack-title">능률VOCA 중등 기본</div>
+                            <div class="pack-stats-grid">
+                                <div class="pack-stat-item">
+                                    <span class="stat-label">암기율</span>
+                                    <span class="stat-value" style="color: var(--accent-color);">32%</span>
+                                </div>
+                                <div class="pack-stat-item">
+                                    <span class="stat-label">진도율</span>
+                                    <span class="stat-value" style="color: #f093fb;">28%</span>
+                                </div>
+                                <div class="pack-stat-item">
+                                    <span class="stat-label">암기 단어</span>
+                                    <span class="stat-value">128 / 400</span>
+                                </div>
+                            </div>
+                            <div class="pack-progress-container">
+                                <div class="pack-progress-fill" style="width: 28%;"></div>
+                            </div>
+                            <div class="pack-last-date">최근 학습: 2일 전</div>
+                        </div>
+                    </div>
                     <div class="word-pack-card memorize-pack-btn" data-pack="middle">
                         <div class="package-thumbnail-area">
                             <div class="diag-book" style="top: 17px; left: 12px;"><img
@@ -469,7 +497,7 @@
                         <div class="progress-info">
                             <span class="current-card" id="currentCard">1</span>
                             <span class="separator">/</span>
-                            <span class="total-cards">10</span>
+                            <span class="total-cards" id="totalCards">10</span>
                         </div>
                     </div>
                 </div>
@@ -504,10 +532,17 @@
                                 </div>
                                 <div class="flashcard-back">
                                     <div class="meaning" id="koreanMeaning">풍부한, 많은</div>
-                                    <div class="example-section">
-                                        <div class="example" id="example">The region has abundant natural resources.
+                                    <div class="example-section" id="exampleSection">
+                                        <div class="example-item" id="exampleItem1">
+                                            <div class="example" id="example">The region has abundant natural resources.
+                                            </div>
+                                            <div class="example-translation" id="exampleTranslation">그 지역은 풍부한 천연자원을 가지고
+                                                있다.</div>
                                         </div>
-                                        <div class="example-translation" id="exampleTranslation">그 지역은 풍부한 천연자원을 가지고 있다.
+                                        <div class="example-item" id="exampleItem2"
+                                            style="display: none; margin-top: 8px;">
+                                            <div class="example" id="example2"></div>
+                                            <div class="example-translation" id="exampleTranslation2"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -580,7 +615,7 @@
                         <div class="stat-label">학습한 단어</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value">10</div>
+                        <div class="stat-value" id="totalWordsCount">10</div>
                         <div class="stat-label">전체 단어</div>
                     </div>
                 </div>
@@ -611,12 +646,63 @@
 
             <!-- Quiz Selection -->
             <div id="quizSelection" class="quiz-selection">
-                <div class="current-pack-indicator">
-                    <div class="current-pack-info">
-                        <span class="indicator-label">현재 학습 중</span>
-                        <h2 class="current-pack-name" id="studyCurrentPackName">능률VOCA 어원편 고등</h2>
+                <div class="quiz-option-card" id="currentPackCard" style="margin-bottom: 2rem;">
+                    <div class="quiz-option-main" id="currentPackToggle">
+                        <div class="current-pack-info" style="width: 100%;">
+                            <span class="indicator-label" style="display: block; margin-bottom: 0.2rem;">학습 할 교재</span>
+                            <h3 id="studyCurrentPackName"
+                                style="color: var(--text-primary); font-size: 1.15rem; font-weight: 800; margin: 0;">
+                                능률VOCA 어원편 고등</h3>
+                        </div>
+                        <div class="expand-arrow">▼</div>
                     </div>
-                    <button class="change-pack-btn" id="changeStudyPackBtn">변경</button>
+                    <div class="quiz-sub-menu" id="currentPackSubMenu" style="display: flex; flex-direction: column;">
+                        <button class="sub-menu-btn pack-select-btn" data-pack="middle_basic"
+                            style="border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.05); flex-direction: row; justify-content: flex-start; padding: 1.2rem; position: relative;">
+                            <div class="sub-text" style="width: 100%; text-align: left;">
+                                <span class="sub-title" style="font-size: 0.95rem;">능률VOCA 중등 기본</span>
+                            </div>
+                            <div class="check-icon"
+                                style="display: none; position: absolute; right: 1.2rem; color: var(--accent-color); font-weight: bold;">
+                                ✓</div>
+                        </button>
+                        <button class="sub-menu-btn pack-select-btn" data-pack="middle"
+                            style="border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.05); flex-direction: row; justify-content: flex-start; padding: 1.2rem; position: relative;">
+                            <div class="sub-text" style="width: 100%; text-align: left;">
+                                <span class="sub-title" style="font-size: 0.95rem;">능률VOCA 어원편 중등</span>
+                            </div>
+                            <div class="check-icon"
+                                style="display: none; position: absolute; right: 1.2rem; color: var(--accent-color); font-weight: bold;">
+                                ✓</div>
+                        </button>
+                        <button class="sub-menu-btn pack-select-btn" data-pack="etymology"
+                            style="border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.05); flex-direction: row; justify-content: flex-start; padding: 1.2rem; position: relative;">
+                            <div class="sub-text" style="width: 100%; text-align: left;">
+                                <span class="sub-title" style="font-size: 0.95rem;">능률VOCA 어원편 고등</span>
+                            </div>
+                            <div class="check-icon"
+                                style="display: none; position: absolute; right: 1.2rem; color: var(--accent-color); font-weight: bold;">
+                                ✓</div>
+                        </button>
+                        <button class="sub-menu-btn pack-select-btn" data-pack="sat"
+                            style="border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.05); flex-direction: row; justify-content: flex-start; padding: 1.2rem; position: relative;">
+                            <div class="sub-text" style="width: 100%; text-align: left;">
+                                <span class="sub-title" style="font-size: 0.95rem;">능률VOCA 수능 필수</span>
+                            </div>
+                            <div class="check-icon"
+                                style="display: none; position: absolute; right: 1.2rem; color: var(--accent-color); font-weight: bold;">
+                                ✓</div>
+                        </button>
+                        <button class="sub-menu-btn pack-select-btn" data-pack="package_sat"
+                            style="border-right: none; border-bottom: none; flex-direction: row; justify-content: flex-start; padding: 1.2rem; position: relative;">
+                            <div class="sub-text" style="width: 100%; text-align: left;">
+                                <span class="sub-title" style="font-size: 0.95rem;">내신+수능대비 패키지</span>
+                            </div>
+                            <div class="check-icon"
+                                style="display: none; position: absolute; right: 1.2rem; color: var(--accent-color); font-weight: bold;">
+                                ✓</div>
+                        </button>
+                    </div>
                 </div>
 
                 <h2 class="section-title">학습 모드를 선택하세요</h2>
@@ -879,6 +965,107 @@
                 </div>
             </div>
 
+            <!-- AI Speaking Mode -->
+            <div id="aiSpeakingMode" class="quiz-container hidden">
+                <div class="quiz-header">
+                    <button class="back-btn" id="backFromAiSpeaking">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                    </button>
+                    <h3 class="quiz-title">AI 스피킹</h3>
+                    <div class="quiz-header-right">
+                        <div class="speaking-timer" id="speakingTimer">00:00</div>
+                    </div>
+                </div>
+                <div class="quiz-content speaking-content">
+                    <div class="speaking-header-info">
+                        <h2 class="speaking-target-sentence" id="speakingTargetSentence">The region has abundant natural
+                            resources.</h2>
+                        <div class="speaking-target-translation" id="speakingTargetTranslation">그 지역은 풍부한 천연자원을 가지고 있다.
+                        </div>
+                        <div class="audio-btn-wrapper">
+                            <button class="sentence-audio-btn" id="speakingListenBtn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M11 5L6 9H2v6h4l5 4V5z" />
+                                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="speaking-visualization-area">
+                        <div class="visualizer-container">
+                            <div class="visualizer-bars" id="speakingVisualizer">
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                                <div class="bar"></div>
+                            </div>
+                            <div class="listening-wave hidden" id="listeningWave">
+                                <span></span><span></span><span></span><span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speaking-controls">
+                        <div class="record-btn-container">
+                            <div class="record-main-area">
+                                <button class="record-main-btn" id="mainRecordBtn">
+                                    <div class="record-inner-circle"></div>
+                                    <svg id="recordIcon" width="32" height="32" viewBox="0 0 24 24" fill="currentColor"
+                                        class="record-svg">
+                                        <path
+                                            d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
+                                        <path
+                                            d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+                                    </svg>
+                                </button>
+                                <div class="record-outer-ring" id="recordOuterRing"></div>
+                            </div>
+                            <div class="record-help-text" id="recordHelpText">버튼을 눌러 녹음 시작</div>
+
+                            <!-- New: retry/analyze actions -->
+                            <div class="post-record-actions hidden" id="postRecordActions">
+                                <button class="post-action-btn retry" id="retryRecordBtn">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="23 4 23 10 17 10"></polyline>
+                                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                                    </svg>
+                                    다시 녹음
+                                </button>
+                                <button class="post-action-btn analyze" id="startAnalyzeBtn">
+                                    AI 분석 시작
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="speaking-footer-tips">
+                        <div class="tip-item">
+                            <span class="tip-icon">💡</span>
+                            <span class="tip-text">문장을 소리 내어 읽으면 AI가 발음을 분석해드려요.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
             <!-- Word-to-Meaning Quiz -->
             <div id="wordToMeaningQuiz" class="quiz-container hidden">
                 <div class="quiz-header">
@@ -1061,6 +1248,27 @@
                         <div class="word-pack-content">
                             <div class="word-pack-info">
                                 <div class="pack-title">능률VOCA 어원편 중등</div>
+                                <div class="price-group">
+                                    <div class="pack-price">4,900원</div>
+                                    <button class="pack-buy-btn">구매하기</button>
+                                </div>
+                            </div>
+                            <div class="pack-actions-bottom">
+                                <button class="pack-trial-btn">Day 1 체험</button>
+                                <button class="pack-pin-btn">구매 인증코드 입력</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 중등 기본 -->
+                    <div class="word-pack-card">
+                        <div class="package-thumbnail-area">
+                            <div class="diag-book" style="top: 17px; left: 12px;"><img
+                                    src="assets/middle_basic_voca_thumb.png" alt="능률VOCA 중등 기본"></div>
+                        </div>
+                        <div class="word-pack-content">
+                            <div class="word-pack-info">
+                                <div class="pack-title">능률VOCA 중등 기본</div>
                                 <div class="price-group">
                                     <div class="pack-price">4,900원</div>
                                     <button class="pack-buy-btn">구매하기</button>
@@ -1594,32 +1802,35 @@
                         <div class="detail-item">
                             <span class="detail-label">발음 (Pronunciation)</span>
                             <div class="detail-bar-bg">
-                                <div class="detail-bar-fill" style="width: 92%; background: var(--success-gradient);">
+                                <div class="detail-bar-fill" id="pronunciationBar"
+                                    style="width: 92%; background: var(--success-gradient);">
                                 </div>
                             </div>
-                            <span class="detail-value">92</span>
+                            <span class="detail-value" id="pronunciationVal">92</span>
                         </div>
                         <div class="detail-item">
                             <span class="detail-label">정확도 (Accuracy)</span>
                             <div class="detail-bar-bg">
-                                <div class="detail-bar-fill" style="width: 78%; background: var(--primary-gradient);">
+                                <div class="detail-bar-fill" id="accuracyBar"
+                                    style="width: 78%; background: var(--primary-gradient);">
                                 </div>
                             </div>
-                            <span class="detail-value">78</span>
+                            <span class="detail-value" id="accuracyVal">78</span>
                         </div>
                         <div class="detail-item">
                             <span class="detail-label">유창성 (Fluency)</span>
                             <div class="detail-bar-bg">
-                                <div class="detail-bar-fill" style="width: 85%; background: var(--secondary-gradient);">
+                                <div class="detail-bar-fill" id="fluencyBar"
+                                    style="width: 85%; background: var(--secondary-gradient);">
                                 </div>
                             </div>
-                            <span class="detail-value">85</span>
+                            <span class="detail-value" id="fluencyVal">85</span>
                         </div>
                     </div>
 
                     <div class="word-feedback-section">
                         <h4>단어별 피드백</h4>
-                        <div class="word-feedback-list">
+                        <div id="speakingWordFeedbackList" class="word-feedback-list">
                             <span class="word-fb correct">The</span>
                             <span class="word-fb correct">region</span>
                             <span class="word-fb warning">has</span>
@@ -1627,7 +1838,7 @@
                             <span class="word-fb correct">natural</span>
                             <span class="word-fb error">resources</span>
                         </div>
-                        <p class="feedback-tip">💡 'resources'의 강세에 주의하여 다시 시도해보세요.</p>
+                        <p class="feedback-tip" id="speakingFeedbackTip">💡 'resources'의 강세에 주의하여 다시 시도해보세요.</p>
                     </div>
 
                     <div class="result-actions">
@@ -1637,6 +1848,7 @@
                 </div>
             </div>
         </div>
+
 
         <!-- Bottom Navigation (Mobile Style) -->
         <nav class="bottom-nav">
