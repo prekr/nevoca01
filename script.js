@@ -113,6 +113,52 @@ const MIDDLE_BASIC_DAY02 = [
     { english: "make friends", korean: "친구가 되다 / 친해지다", example: "I made friends with them.", exampleKorean: "나는 그들과 친구가 되었다.", example2: "IDIOMS & PHRASES", exampleKorean2: "영단어 우리말 뜻 영단어 우리말 뜻 잘 외워지지 않는 영단어를 아래 빈칸에 다시 써 봅시다." }
 ];
 
+const MIDDLE_BASIC_DAY03 = [
+    { english: "dinner", korean: "저녁 (식사)", example: "He cooks dinner for his family.", exampleKorean: "그는 가족을 위해 저녁 식사를 요리한다.", example2: "have[eat] dinner", exampleKorean2: "저녁을 먹다" },
+    { english: "dirty", korean: "더러운", example: "Your hands are too dirty.", exampleKorean: "너의 손은 너무 더럽다." },
+    { english: "study", korean: "공부하다 / 연구하다  명 1. 공부", example: "He is studying English.", exampleKorean: "그는 영어를 공부하고 있다.", example2: "a study of birds", exampleKorean2: "새에 관한 연구" },
+    { english: "enter", korean: "들어가다 / 입학하다", example: "She entered the restaurant.", exampleKorean: "교과서 그녀는 식당에 들어갔다.", example2: "He entered a school.", exampleKorean2: "그는 학교에 입학했다." },
+    { english: "minute", korean: "[시간의 단위] 분 / 잠깐", example: 'Do you know about the four minutes of "Golden Time?"', exampleKorean: "교과서 4분의 ‘골든 타임'을 아나요?", example2: "Wait a minute.", exampleKorean2: "잠깐 기다려라." },
+    { english: "sand", korean: "모래", example: "I got sand in my eye.", exampleKorean: "나는 눈에 모래가 들어갔다." },
+    { english: "wet", korean: "젖은 / 축축한", example: "My hair got wet in the rain.", exampleKorean: "내 머리는 비에 젖었다.", example2: "a wet T-shirt", exampleKorean2: "축축한 티셔츠" },
+    { english: "hot", korean: "뜨거운, 더운 cold / 매운", example: "I like to swim on hot days.", exampleKorean: "나는 더운 날에 수영하는 것을 좋아한다.", example2: "This chili sauce is too hot.", exampleKorean2: "이 칠리 소스는 너무 맵다." },
+    { english: "beach", korean: "해변 / 바닷가", example: "Let's go to the beach this summer.", exampleKorean: "이번 여름에 해변에 가자." },
+    { english: "feel", korean: "(felt-felt) 1. (촉감으로) 느끼다 / (기분 · 감정 등이) 들다", example: "Your eyes will feel dry if you do not blink often.", exampleKorean: "교과서 너는 눈을 자주 깜빡이지 않으면, 눈이 건조하게 느껴질 것이다.", example2: "I felt better after a good sleep.", exampleKorean2: "나는 푹 자고 나서 기분이 나아졌다." },
+    { english: "bake", korean: "(빵 · 과자를) 굽다", example: "She baked cookies for you.", exampleKorean: "그녀가 널 위해 쿠키를 구웠다.", example2: "0126 baker", exampleKorean2: "명 제빵사" },
+    { english: "really", korean: "실제로, 진짜로 / [강조] 아주, 정말로", example: "He really came to the party.", exampleKorean: "그는 실제로 그 파티에 왔다.", example2: "I am really sorry.", exampleKorean2: "정말 죄송합니다." },
+    { english: "root", korean: "(식물의) 뿌리 / 근원, 원인", example: "This tree has deep roots.", exampleKorean: "이 나무는 깊은 뿌리가 있다.", example2: "root of all evil", exampleKorean2: "모든 악의 근원" },
+    { english: "dry", korean: "마른, 건조한 wet 0047   동 마르다", example: "The air is very dry.", exampleKorean: "공기가 매우 건조하다.", example2: "Dry your hands well.", exampleKorean2: "네 손을 잘 말려라." },
+    { english: "last", korean: "마지막의 / 지난", example: "This is the last bus to Seoul.", exampleKorean: "이것이 서울로 가는 마지막 버스이다.", example2: "My birthday was last Saturday.", exampleKorean2: "교과서 내 생일은 지난 주 토요일이었다." },
+    { english: "lake", korean: "호수", example: "There are ducks on the lake.", exampleKorean: "호수 위에 오리들이 있다." },
+    { english: "again", korean: "다시 / 또", example: "He was late for class again.", exampleKorean: "그는 수업에 또 지각했다." },
+    { english: "word", korean: "단어 / 낱말", example: "Many English words come from Latin.", exampleKorean: "많은 영어 단어들이 라틴어에서 유래한다." },
+    { english: "have fun", korean: "즐기다 / 재미있게 놀다", example: "We had fun at the party.", exampleKorean: "우리는 파티에서 재미있게 놀았다." },
+    { english: "eat out", korean: "외식하다", example: "They eat out on Sundays.", exampleKorean: "그들은 일요일마다 외식을 한다." }
+];
+
+const MIDDLE_BASIC_DAY04 = [
+    { english: "kid", korean: "아이 / 어린이", example: "The kids are having lunch.", exampleKorean: "아이들이 점심을 먹고 있다.", example2: "shoes for kids", exampleKorean2: "아동용 신발" },
+    { english: "hour", korean: "[시간의 단위] 시간", example: "I waited for two hours.", exampleKorean: "나는 2시간 동안 기다렸다.", example2: "0045 minute", exampleKorean2: "명 분" },
+    { english: "clock", korean: "시계", example: "This clock is five minutes fast.", exampleKorean: "이 시계는 5분 빠르다.", example2: "0031 watch", exampleKorean2: "명 손목시계" },
+    { english: "breakfast", korean: "아침 (식사)", example: "What do you want for breakfast?", exampleKorean: "너는 아침 식사로 무엇을 먹고 싶니?", example2: "0025 lunch", exampleKorean2: "명 점심 (식사)" },
+    { english: "morning", korean: "아침 / 오전", example: "I went jogging this morning.", exampleKorean: "나는 오늘 아침에 조깅을 했다.", example2: "in the morning", exampleKorean2: "아침에" },
+    { english: "live", korean: "살다  형 [laIv] 살아있는", example: 'He lives in Sevilla, Spain.', exampleKorean: "교과서 그는 스페인 세비야에 산다.", example2: "live animals", exampleKorean2: "살아있는 동물들" },
+    { english: "sour", korean: "신, 시큼한 / (우유 등이) 상한", example: "This lemon is very sour.", exampleKorean: "이 레몬은 매우 시다.", example2: "The milk went sour.", exampleKorean2: "그 우유는 상했다." },
+    { english: "meat", korean: "고기", example: "My sister doesn't eat meat.", exampleKorean: "내 여동생은 고기를 먹지 않는다." },
+    { english: "ready", korean: "준비가 된", example: "We're ready for the game.", exampleKorean: "우리는 경기를 할 준비가 되어 있다.", example2: "I'm sorry, but the cookies aren't ready.", exampleKorean2: "교과서 죄송하지만, 쿠키가 아직 준비되지 않았습니다." },
+    { english: "with", korean: "…와 함께 / …로, …을 이용하여", example: "Will you go with me?", exampleKorean: "나와 함께 갈래?", example2: "The hills are covered with soft green grass.", exampleKorean2: "교과서 그 언덕들은 부드러운 녹색 풀로 덮여 있다." },
+    { english: "week", korean: "(월요일부터 일요일까지) 주 / 일주일", example: "I don't go to school this week.", exampleKorean: "나는 이번 주에 학교에 가지 않는다.", example2: "for a week", exampleKorean2: "일주일 동안" },
+    { english: "far", korean: "멀리  형 먼 near 0084 ( 부 / 형 )", example: "He lives far from here.", exampleKorean: "그는 여기에서 멀리 떨어진 곳에 산다.", example2: "a far country", exampleKorean2: "먼 나라" },
+    { english: "son", korean: "아들", example: "My son likes toy robots.", exampleKorean: "내 아들은 장난감 로봇을 좋아한다.", example2: "0189 parent", exampleKorean2: "(부모님)" },
+    { english: "soil", korean: "흙 / 토양", example: "The soil here is too dry for plants to grow.", exampleKorean: "이곳의 토양은 식물이 자라기엔 너무 건조하다." },
+    { english: "rainy", korean: "비가 오는", example: "I don't go out on rainy days.", exampleKorean: "나는 비 오는 날에 나가지 않는다.", example2: "rain", exampleKorean2: "명 비, 빗물; 동 비가 오다" },
+    { english: "hair", korean: "머리(카락)", example: "An old man with gray hair is running away.", exampleKorean: "교과서 회색 머리카락을 가진 노인이 도망치고 있다." },
+    { english: "funny", korean: "우스운 / 웃기는", example: "She made a funny face.", exampleKorean: "그녀는 우스운 표정을 지었다.", example2: "fun", exampleKorean2: "명 재미; 형 재미있는" },
+    { english: "night", korean: "밤 / 야간", example: "She saw a movie last night.", exampleKorean: "어젯밤에 영화를 봤다.", example2: "in the morning", exampleKorean2: "(아침에)" },
+    { english: "look like", korean: "…처럼 보이다 / …할 것 같다", example: "That cat looks like a lion.", exampleKorean: "저 고양이는 사자처럼 보인다.", example2: "It looks like rain.", exampleKorean2: "비가 올 것 같다." },
+    { english: "all day (long)", korean: "하루 종일", example: "She was at school all day long.", exampleKorean: "그녀는 하루 종일 학교에 있었다." }
+];
+
 /**
  * CSV 한 행 파싱 (쌍따옴표 필드 처리)
  */
@@ -180,7 +226,7 @@ async function loadMiddleBasicCSV() {
         return byDay;
     } catch (err) {
         console.warn('중등 기본 CSV 로드 실패, 임베디드 데이터 사용:', err.message);
-        middleBasicByDay = { 1: MIDDLE_BASIC_DAY01, 2: MIDDLE_BASIC_DAY02 };
+        middleBasicByDay = { 1: MIDDLE_BASIC_DAY01, 2: MIDDLE_BASIC_DAY02, 3: MIDDLE_BASIC_DAY03, 4: MIDDLE_BASIC_DAY04 };
         return middleBasicByDay;
     }
 }
@@ -1371,36 +1417,14 @@ let isQuizAutoPlayEnabled = true;
 
 // 오디오 토글 상태 업데이트 함수
 function updateQuizAudioToggleUI() {
-    const toggles = [
-        document.getElementById('spellingAutoplayToggle'),
-        document.getElementById('sentenceAutoplayToggle'),
-        document.getElementById('wordToMeaningAutoplayToggle'),
-        document.getElementById('memorizeAutoplayToggle')
-    ];
-    toggles.forEach(checkbox => {
-        if (checkbox) {
-            checkbox.checked = isQuizAutoPlayEnabled;
-        }
-    });
+    const checkbox = document.getElementById('memorizeAutoplayToggle');
+    if (checkbox) {
+        checkbox.checked = isQuizAutoPlayEnabled;
+    }
 }
 
 // 토글 버튼 리스너
-document.getElementById('spellingAutoplayToggle').addEventListener('change', (e) => {
-    isQuizAutoPlayEnabled = e.target.checked;
-    updateQuizAudioToggleUI();
-});
-
-document.getElementById('sentenceAutoplayToggle').addEventListener('change', (e) => {
-    isQuizAutoPlayEnabled = e.target.checked;
-    updateQuizAudioToggleUI();
-});
-
 document.getElementById('memorizeAutoplayToggle').addEventListener('change', (e) => {
-    isQuizAutoPlayEnabled = e.target.checked;
-    updateQuizAudioToggleUI();
-});
-
-document.getElementById('wordToMeaningAutoplayToggle').addEventListener('change', (e) => {
     isQuizAutoPlayEnabled = e.target.checked;
     updateQuizAudioToggleUI();
 });
@@ -1525,7 +1549,7 @@ quizCards.forEach(({ toggleId, cardId }) => {
 });
 
 // 스펠링 퀴즈 시작 (기본 로직 추출)
-function startSpellingQuiz(modeTitle, source = 'selection') {
+function startSpellingQuiz(modeTitle, source = 'selection', dayNum = null) {
     deactivateAll();
     currentQuizType = 'spelling';
     currentQuizSource = source;
@@ -1534,6 +1558,17 @@ function startSpellingQuiz(modeTitle, source = 'selection') {
     sentenceQuizStates = [];
     spellingQuizStates = [];
     if (countdownInterval) clearInterval(countdownInterval);
+
+    // 데이터 설정
+    if (source === 'day' && dayNum) {
+        if (currentPack === 'middle_basic' && middleBasicByDay && middleBasicByDay[dayNum]) {
+            currentVocabulary = middleBasicByDay[dayNum];
+        } else {
+            currentVocabulary = vocabulary;
+        }
+    } else {
+        currentVocabulary = vocabulary;
+    }
 
     // 서브 메뉴 타이틀 업데이트
     const display = document.getElementById('spellingSubModeDisplay');
@@ -1546,7 +1581,7 @@ function startSpellingQuiz(modeTitle, source = 'selection') {
 }
 
 // 문장 퀴즈 시작
-function startSentenceQuiz(modeTitle, source = 'selection') {
+function startSentenceQuiz(modeTitle, source = 'selection', dayNum = null) {
     deactivateAll();
     currentQuizType = 'sentence';
     currentQuizSource = source;
@@ -1556,6 +1591,17 @@ function startSentenceQuiz(modeTitle, source = 'selection') {
     spellingQuizStates = [];
     wordToMeaningQuizStates = [];
     if (countdownInterval) clearInterval(countdownInterval);
+
+    // 데이터 설정
+    if (source === 'day' && dayNum) {
+        if (currentPack === 'middle_basic' && middleBasicByDay && middleBasicByDay[dayNum]) {
+            currentVocabulary = middleBasicByDay[dayNum];
+        } else {
+            currentVocabulary = vocabulary; // 기본 vocabulary 사용
+        }
+    } else {
+        currentVocabulary = vocabulary; // 기본 vocabulary 사용
+    }
 
     const display = document.getElementById('sentenceSubModeDisplay');
     if (display) display.textContent = modeTitle || '';
@@ -1567,7 +1613,7 @@ function startSentenceQuiz(modeTitle, source = 'selection') {
 }
 
 // 뜻 찾기 퀴즈 시작
-function startWordToMeaningQuiz(modeTitle, source = 'selection') {
+function startWordToMeaningQuiz(modeTitle, source = 'selection', dayNum = null) {
     deactivateAll();
     currentQuizType = 'wordToMeaning';
     currentQuizSource = source;
@@ -1577,6 +1623,17 @@ function startWordToMeaningQuiz(modeTitle, source = 'selection') {
     sentenceQuizStates = [];
     wordToMeaningQuizStates = [];
     if (countdownInterval) clearInterval(countdownInterval);
+
+    // 데이터 설정
+    if (source === 'day' && dayNum) {
+        if (currentPack === 'middle_basic' && middleBasicByDay && middleBasicByDay[dayNum]) {
+            currentVocabulary = middleBasicByDay[dayNum];
+        } else {
+            currentVocabulary = vocabulary; // 기본 vocabulary 사용
+        }
+    } else {
+        currentVocabulary = vocabulary; // 기본 vocabulary 사용
+    }
 
     const display = document.getElementById('wordMeaningSubModeDisplay');
     if (display) display.textContent = modeTitle || '';
@@ -1612,7 +1669,7 @@ document.querySelectorAll('.sub-menu-btn').forEach(btn => {
     });
 });
 
-function showStudyDaySelection(type) {
+async function showStudyDaySelection(type) {
     document.getElementById('quizSelection').style.display = 'none';
     document.getElementById('spellingQuiz').classList.add('hidden');
     document.getElementById('sentenceQuiz').classList.add('hidden');
@@ -1623,11 +1680,14 @@ function showStudyDaySelection(type) {
 
     // 타이틀 업데이트
     const title = selection.querySelector('.quiz-title');
-    const packPrefix = `[${currentPackTitle}] `;
+    const packPrefix = `[${currentPackTitle || '능률VOCA 어원편 고등'}] `;
     if (type === 'spelling') title.textContent = packPrefix + '스펠링 퀴즈: Day 선택';
     else if (type === 'wordToMeaning') title.textContent = packPrefix + '단어 퀴즈: Day 선택';
     else if (type === 'sentence') title.textContent = packPrefix + '문장 퀴즈: Day 선택';
 
+    if (currentPack === 'middle_basic') {
+        await loadMiddleBasicCSV();
+    }
     generateStudyDayGrid(type);
 }
 
@@ -1635,23 +1695,37 @@ function generateStudyDayGrid(type) {
     const grid = document.getElementById('studyDayGrid');
     grid.innerHTML = '';
 
-    for (let i = 1; i <= 30; i++) {
+    const isMiddleBasic = currentPack === 'middle_basic';
+    const totalDays = isMiddleBasic && middleBasicByDay
+        ? Math.max(...Object.keys(middleBasicByDay).map(Number), 0) || 50
+        : 30; // 기본값 30일
+
+    for (let i = 1; i <= totalDays; i++) {
         const dayCard = document.createElement('div');
         dayCard.className = 'day-card';
 
-        // 고정 데이터 (나중에 DB 연동 시 변경)
+        let dayWordCount = 30; // 기본값
         let completedCount;
-        if (i < 8) completedCount = 30;
-        else if (i < 20) completedCount = 22 - (i % 7);
-        else completedCount = 12 - (i % 5);
-        const isCompleted = completedCount === 30;
+
+        if (isMiddleBasic && middleBasicByDay && middleBasicByDay[i]) {
+            dayWordCount = middleBasicByDay[i].length;
+            // 임시 진행도 계산 (실제 데이터에 따라 변경 필요)
+            completedCount = Math.min(Math.floor((i / totalDays) * dayWordCount), dayWordCount);
+        } else {
+            // 임시 진행도 계산 (실제 데이터에 따라 변경 필요)
+            if (i < 8) completedCount = 30;
+            else if (i < 20) completedCount = 22 - (i % 7);
+            else completedCount = 12 - (i % 5);
+        }
+
+        const isCompleted = completedCount === dayWordCount;
         if (isCompleted) dayCard.classList.add('completed');
-        const percentage = (completedCount / 30) * 100;
+        const percentage = (completedCount / dayWordCount) * 100;
 
         dayCard.innerHTML = `
             ${isCompleted ? '<span class="day-badge">🏅</span>' : ''}
             <div class="day-number">Day ${i}</div>
-            <div class="day-stats">${completedCount}/30</div>
+            <div class="day-stats">${completedCount}/${dayWordCount}</div>
             <div class="day-progress-container">
                 <div class="day-progress-fill" style="width: ${percentage}%;"></div>
             </div>
@@ -1659,9 +1733,9 @@ function generateStudyDayGrid(type) {
 
         dayCard.addEventListener('click', () => {
             document.getElementById('studyDaySelection').classList.add('hidden');
-            if (type === 'spelling') startSpellingQuiz(`Day ${i}`, 'day');
-            else if (type === 'wordToMeaning') startWordToMeaningQuiz(`Day ${i}`, 'day');
-            else if (type === 'sentence') startSentenceQuiz(`Day ${i}`, 'day');
+            if (type === 'spelling') startSpellingQuiz(`Day ${i}`, 'day', i);
+            else if (type === 'wordToMeaning') startWordToMeaningQuiz(`Day ${i}`, 'day', i);
+            else if (type === 'sentence') startSentenceQuiz(`Day ${i}`, 'day', i);
         });
 
         grid.appendChild(dayCard);
@@ -1764,14 +1838,14 @@ document.getElementById('backFromAssignment').addEventListener('click', () => {
 
 // 스펠링 퀴즈 로드
 function loadSpellingQuestion() {
-    if (quizIndex >= vocabulary.length) {
+    if (quizIndex >= currentVocabulary.length) {
         showResults();
         return;
     }
 
     // 퀴즈 상태 초기화 (첫 시작 시)
     if (spellingQuizStates.length === 0) {
-        spellingQuizStates = vocabulary.map(word => {
+        spellingQuizStates = currentVocabulary.map(word => {
             const wordLower = word.english.toLowerCase();
             const numBlanks = Math.min(Math.floor(wordLower.length / 2), 3);
             const availablePositions = Array.from({ length: wordLower.length }, (_, i) => i);
@@ -1792,7 +1866,7 @@ function loadSpellingQuestion() {
         });
     }
 
-    const word = vocabulary[quizIndex];
+    const word = currentVocabulary[quizIndex];
     const wordLower = word.english.toLowerCase();
     const state = spellingQuizStates[quizIndex];
 
@@ -1800,17 +1874,14 @@ function loadSpellingQuestion() {
     const dummyFailures = (word.english.length * 7) % 5;
     document.getElementById('spellingFailureCount').textContent = `${dummyFailures}번 틀림`;
     document.getElementById('spellingMeaning').textContent = word.korean;
-    document.getElementById('spellingProgress').textContent = `${quizIndex + 1}/10`;
+    document.getElementById('spellingProgress').textContent = `${quizIndex + 1}/${currentVocabulary.length}`;
     document.getElementById('spellingFeedback').textContent = state.isCorrect ? '✅ 정답입니다!' : '';
     document.getElementById('spellingFeedback').className = state.isCorrect ? 'quiz-feedback correct' : 'quiz-feedback';
     document.getElementById('spellingCountdown').classList.add('hidden');
 
     if (countdownInterval) clearInterval(countdownInterval);
 
-    // 자동 소리 재생
-    if (isQuizAutoPlayEnabled && !state.isCorrect) {
-        speakWord(word.english);
-    }
+    // 스펠링 퀴즈 진행시 수동 버튼 외에는 자동 소리 재생 하지 않음
     updateQuizAudioToggleUI();
 
     // 버튼 상태
@@ -1933,7 +2004,7 @@ function startSpellingCountdown() {
         } else {
             clearInterval(countdownInterval);
             countdownEl.classList.add('hidden');
-            if (quizIndex < vocabulary.length - 1) {
+            if (quizIndex < currentVocabulary.length - 1) {
                 quizIndex++;
                 loadSpellingQuestion();
             } else {
@@ -1954,7 +2025,7 @@ document.getElementById('spellingPrevBtn').addEventListener('click', () => {
 
 document.getElementById('spellingNextBtn').addEventListener('click', () => {
     if (countdownInterval) clearInterval(countdownInterval);
-    if (quizIndex < vocabulary.length - 1) {
+    if (quizIndex < currentVocabulary.length - 1) {
         quizIndex++;
         loadSpellingQuestion();
     } else {
@@ -1964,14 +2035,14 @@ document.getElementById('spellingNextBtn').addEventListener('click', () => {
 
 // 문장 퀴즈 로드
 function loadSentenceQuestion() {
-    if (quizIndex >= vocabulary.length) {
+    if (quizIndex >= currentVocabulary.length) {
         showResults();
         return;
     }
 
     // 퀴즈 상태 초기화 (첫 시작 시)
     if (sentenceQuizStates.length === 0) {
-        sentenceQuizStates = vocabulary.map(word => {
+        sentenceQuizStates = currentVocabulary.map(word => {
             const sentence = word.example;
             const words = sentence.match(/\b[\w']+\b|[.,!?;]/g);
             return {
@@ -1983,7 +2054,7 @@ function loadSentenceQuestion() {
         });
     }
 
-    const word = vocabulary[quizIndex];
+    const word = currentVocabulary[quizIndex];
     const state = sentenceQuizStates[quizIndex];
     const words = state.originalWords;
 
@@ -1992,14 +2063,11 @@ function loadSentenceQuestion() {
     document.getElementById('sentenceFailureCount').textContent = `${dummyFailures}번 틀림`;
     document.getElementById('sentenceHint').textContent = `${word.english} - ${word.korean}`;
     document.getElementById('sentenceQuizTranslation').textContent = word.exampleKorean;
-    document.getElementById('sentenceProgress').textContent = `${quizIndex + 1}/10`;
+    document.getElementById('sentenceProgress').textContent = `${quizIndex + 1}/${currentVocabulary.length}`;
     document.getElementById('sentenceFeedback').textContent = state.isCorrect ? '✅ 정답입니다!' : '';
     document.getElementById('sentenceFeedback').className = state.isCorrect ? 'quiz-feedback correct' : 'quiz-feedback';
 
-    // 자동 소리 재생
-    if (isQuizAutoPlayEnabled && !state.isCorrect) {
-        speakWord(words.join(' '));
-    }
+    // 문장 퀴즈 진행시 수동 버튼 외에는 자동 소리 재생 하지 않음 
     updateQuizAudioToggleUI();
 
     const constructionArea = document.getElementById('sentenceConstruction');
@@ -2114,7 +2182,7 @@ function loadSentenceQuestion() {
         e.stopPropagation();
         const state = sentenceQuizStates[quizIndex];
         const currentSentence = state ? state.originalWords.join(' ') : "";
-        const currentTranslation = vocabulary[quizIndex] ? vocabulary[quizIndex].exampleKorean : "";
+        const currentTranslation = currentVocabulary[quizIndex] ? currentVocabulary[quizIndex].exampleKorean : "";
         startAiSpeaking(currentSentence, currentTranslation);
     };
 
@@ -2159,7 +2227,7 @@ document.getElementById('sentencePrevBtn').addEventListener('click', () => {
 });
 
 document.getElementById('sentenceNextBtn').addEventListener('click', () => {
-    if (quizIndex < vocabulary.length - 1) {
+    if (quizIndex < currentVocabulary.length - 1) {
         quizIndex++;
         loadSentenceQuestion();
     } else {
@@ -2169,45 +2237,42 @@ document.getElementById('sentenceNextBtn').addEventListener('click', () => {
 
 // 뜻 찾기 퀴즈 로드
 function loadWordToMeaningQuestion() {
-    if (quizIndex >= vocabulary.length) {
+    if (quizIndex >= currentVocabulary.length) {
         showResults();
         return;
     }
 
     // 상태 초기화
     if (wordToMeaningQuizStates.length === 0) {
-        wordToMeaningQuizStates = vocabulary.map(word => {
-            // 다른 3개의 오답 영어 단어 가져오기
-            const otherWords = vocabulary
+        wordToMeaningQuizStates = currentVocabulary.map(word => {
+            // 다른 3개의 오답 영어 뜻(korean) 가져오기
+            const otherMeanings = currentVocabulary
                 .filter(v => v.english !== word.english)
-                .map(v => v.english);
+                .map(v => v.korean);
 
-            const shuffledOthers = otherWords.sort(() => Math.random() - 0.5);
+            const shuffledOthers = otherMeanings.sort(() => Math.random() - 0.5);
             const selectedOthers = shuffledOthers.slice(0, 3);
-
-            const options = [word.english, ...selectedOthers].sort(() => Math.random() - 0.5);
+            const choices = [word.korean, ...selectedOthers].sort(() => Math.random() - 0.5);
 
             return {
                 isCorrect: false,
-                options: options,
+                options: choices,
                 selectedOption: null
             };
         });
     }
 
-    const word = vocabulary[quizIndex];
+    const word = currentVocabulary[quizIndex];
     const state = wordToMeaningQuizStates[quizIndex];
 
     // UI 업데이트
     const dummyFailures = (word.english.length * 9) % 6;
     document.getElementById('meaningFailureCount').textContent = `${dummyFailures}번 틀림`;
-    document.getElementById('wordToMeaningWord').textContent = word.korean; // 뜻 표시
-    document.getElementById('wordToMeaningProgress').textContent = `${quizIndex + 1}/${vocabulary.length}`;
+    document.getElementById('wordToMeaningWord').textContent = word.english; // 영어 단표 표시 
+    document.getElementById('wordToMeaningProgress').textContent = `${quizIndex + 1}/${currentVocabulary.length}`;
     document.getElementById('wordToMeaningFeedback').textContent = state.isCorrect ? '✅ 정답입니다!' : '';
     document.getElementById('wordToMeaningFeedback').className = state.isCorrect ? 'quiz-feedback correct' : 'quiz-feedback';
 
-    // 소리 재생 (뜻을 보고 단어를 맞추는 것이므로, 정답을 맞췄을 때 소리를 들려주는 것이 자연스러움)
-    // 혹은 문제 진입 시에는 소리를 안 들려주는 게 맞을 수도 있음 (힌트가 되니까)
     updateQuizAudioToggleUI();
 
     const optionsContainer = document.getElementById('meaningOptions');
@@ -2216,8 +2281,8 @@ function loadWordToMeaningQuestion() {
     state.options.forEach(option => {
         const btn = document.createElement('button');
         btn.className = 'meaning-option-btn';
-        if (state.isCorrect && option === word.english) btn.classList.add('correct');
-        else if (state.isCorrect && option === state.selectedOption && option !== word.english) btn.classList.add('wrong');
+        if (state.isCorrect && option === word.korean) btn.classList.add('correct');
+        else if (state.isCorrect && option === state.selectedOption && option !== word.korean) btn.classList.add('wrong');
 
         btn.textContent = option;
 
@@ -2225,7 +2290,7 @@ function loadWordToMeaningQuestion() {
             if (state.isCorrect) return;
 
             state.selectedOption = option;
-            if (option === word.english) {
+            if (option === word.korean) {
                 state.isCorrect = true;
                 btn.classList.add('correct');
                 document.getElementById('wordToMeaningFeedback').textContent = '✅ 정답입니다!';
@@ -2236,10 +2301,10 @@ function loadWordToMeaningQuestion() {
 
                 // 1.5초 후 다음 문제로 자동 이동 (마지막 문제 아니면)
                 setTimeout(() => {
-                    if (quizIndex < vocabulary.length - 1 && state.isCorrect) {
+                    if (quizIndex < currentVocabulary.length - 1 && state.isCorrect) {
                         quizIndex++;
                         loadWordToMeaningQuestion();
-                    } else if (quizIndex === vocabulary.length - 1) {
+                    } else if (quizIndex === currentVocabulary.length - 1) {
                         showResults();
                     }
                 }, 1500);
@@ -2253,8 +2318,11 @@ function loadWordToMeaningQuestion() {
                 }, 1000);
             }
         });
+
         optionsContainer.appendChild(btn);
     });
+
+    updateQuizAudioToggleUI();
 
     document.getElementById('wordToMeaningPrevBtn').disabled = quizIndex === 0;
     document.getElementById('wordToMeaningNextBtn').disabled = !state.isCorrect;
@@ -2269,7 +2337,7 @@ document.getElementById('wordToMeaningPrevBtn').addEventListener('click', () => 
 });
 
 document.getElementById('wordToMeaningNextBtn').addEventListener('click', () => {
-    if (quizIndex < vocabulary.length - 1) {
+    if (quizIndex < currentVocabulary.length - 1) {
         quizIndex++;
         loadWordToMeaningQuestion();
     } else {
